@@ -1,4 +1,4 @@
-# My Personal Project
+# Draw-Synth
 
 ## Project Description
 
@@ -16,7 +16,8 @@ The target audience for this application is therefore music producers and artist
 As such, the evolution of the synthesis system used in this proof of concept makes a good candidate for
 adaptation into a plugin for a more well-established audio system.
 
-##User Stories
+
+## User Stories
 
 *The following four user stories have an initial implementation, as of Phase 1:*
 
