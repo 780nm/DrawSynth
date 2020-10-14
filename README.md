@@ -16,7 +16,7 @@ The target audience for this application is therefore music producers and artist
 As such, the evolution of the synthesis system used in this proof of concept makes a good candidate for
 adaptation into a plugin for a more well-established audio system.
 
-Personally, I'm primarily interesting in using this project to explore low-level signal generation and manipulation,
+Personally, I'm primarily interested in using this project to explore low-level signal generation and manipulation,
 and practicing building up an application using object-oriented design principles.
 
 ## User Stories
