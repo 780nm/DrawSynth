@@ -1,14 +1,11 @@
 package model;
 
-import com.sun.xml.internal.messaging.saaj.packaging.mime.util.LineInputStream;
 import synthesis.Instrument;
 import synthesis.SampleOps;
 
 import javax.sound.sampled.AudioFormat;
 import java.io.ByteArrayOutputStream;
 import java.io.IOException;
-import java.lang.reflect.Array;
-import java.math.BigInteger;
 import java.util.*;
 
 // Represents a track, which contains a set of notes and an associated instrument they may be played with

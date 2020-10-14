@@ -3,7 +3,6 @@ package model;
 import synthesis.AmplitudeModulator;
 import synthesis.Instrument;
 import synthesis.PitchModulator;
-import synthesis.SampleOps;
 
 import javax.sound.sampled.AudioFormat;
 

@@ -1,7 +1,6 @@
 package model;
 
 import org.junit.jupiter.api.Test;
-import synthesis.KeyframedAmplitude;
 import synthesis.SinusoidInstrument;
 
 import javax.sound.sampled.AudioFormat;

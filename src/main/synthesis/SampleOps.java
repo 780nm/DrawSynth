@@ -1,7 +1,6 @@
 package synthesis;
 
 import javax.sound.sampled.AudioFormat;
-import java.math.BigInteger;
 
 public class SampleOps {
 

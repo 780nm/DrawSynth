@@ -1,11 +1,8 @@
 package synthesis;
 
-import org.junit.jupiter.api.Assertions;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 import javax.sound.sampled.AudioFormat;
-import java.util.Arrays;
 
 import static javax.sound.sampled.AudioFormat.Encoding.PCM_SIGNED;
 

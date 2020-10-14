@@ -1,7 +1,5 @@
 package synthesis;
 
-import sun.nio.cs.ext.MacThai;
-
 import javax.sound.sampled.AudioFormat;
 
 public class SinusoidInstrument implements Instrument {
