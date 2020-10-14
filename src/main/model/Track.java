@@ -1,7 +1,6 @@
 package model;
 
 import synthesis.Instrument;
-import synthesis.SampleOps;
 
 import javax.sound.sampled.AudioFormat;
 import java.io.ByteArrayOutputStream;
@@ -39,12 +38,29 @@ public class Track implements Playable {
 
             note = notes.get(timeStamp);
             buffer = note.synthesizeSample(format, instrument);
-            output.write(SampleOps.encodeBytes(buffer, format));
+            output.write(encodeBytes(buffer, format));
         }
 
         return output.toByteArray();
 
     }
+
+    // REQUIRES: waveform generated using the same format given, encoding is PCM_SIGNED
+    // EFFECTS: Converts double sample array to a PCM_SIGNED encoded byte array, and returns it
+    public static byte[] encodeBytes(double[] waveform, AudioFormat format) {
+        int bytesPerSample = format.getFrameSize() / format.getChannels();
+        byte[] output = new byte[bytesPerSample * waveform.length];
+
+        for (int i = 0; i < waveform.length; i++) {
+            int sample = (int) waveform[i];
+            for (int j = 0; j < bytesPerSample; j++) {
+                output[i * bytesPerSample + j] = (byte) (sample >> (8 * j));
+            }
+        }
+
+        return output;
+    }
+
 
     // REQUIRES: timeStamp >= 0, note is not null and does not overlap any existing notes in the track
     // MODIFIES: this

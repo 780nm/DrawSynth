@@ -64,4 +64,15 @@ public class EnvelopeAmplitudeTest {
 
     }
 
+    @Test
+    public void testApplyAmplitudeProfileMono() {
+        format = new AudioFormat(PCM_SIGNED, 44100, 16, 1, 4, 44100, false);
+
+        amplitudeOne.applyAmplitudeProfile(wave, format);
+
+        for (int i = 0; i < 10; i++){
+            Assertions.assertEquals(1, wave[i]);
+        }
+    }
+
 }

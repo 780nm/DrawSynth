@@ -8,6 +8,7 @@ import synthesis.*;
 import javax.sound.sampled.AudioFormat;
 
 import java.io.IOException;
+import java.util.Arrays;
 
 import static javax.sound.sampled.AudioFormat.Encoding.PCM_SIGNED;
 import static org.junit.jupiter.api.Assertions.fail;
@@ -97,6 +98,32 @@ public class TrackTest {
 
         for (int i = 0; i < wave.length; i++){
             Assertions.assertEquals(expected[i], wave[i]);
+        }
+
+    }
+
+    @Test
+    public void testEncodeBytesEmpty() {
+        double[] emptyWave = new double[10];
+        Arrays.fill(emptyWave, 0);
+
+        byte[] encodedSample = Track.encodeBytes(emptyWave, format);
+
+        for (int i = 0; i < 20; i++){
+            Assertions.assertEquals(0, encodedSample[i]);
+        }
+
+    }
+
+    @Test
+    public void testEncodeBytesSample() {
+        double[] sampleWave = {0,0,1000,1000,0,0,-1000,-1000,0,0};
+
+        byte[] expected = {0,0,0,0,-24,3,-24,3,0,0,0,0,24,-4,24,-4,0,0,0,0};
+        byte[] encodedSample = Track.encodeBytes(sampleWave, format);
+
+        for (int i = 0; i < 20; i++){
+            Assertions.assertEquals(expected[i], encodedSample[i]);
         }
 
     }
