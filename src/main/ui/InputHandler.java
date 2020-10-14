@@ -1,7 +1,5 @@
 package ui;
 
-import com.sun.xml.internal.bind.v2.schemagen.Util;
-
 import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
