@@ -1,30 +1,36 @@
 package synthesis;
 
+import org.json.JSONObject;
+
+import java.util.UUID;
+
 // Unchanging PitchModulator
 public class ConstantPitch implements PitchModulator {
 
-    double pitch;
+    private final UUID PMOD_ID;
 
-    // REQUIRES: pitch > 0
-    // EFFECTS: Constructs a ConstantPitch object with the given pitch
-    public ConstantPitch(double pitch) {
-        this.pitch = pitch;
+    public ConstantPitch() {
+        PMOD_ID = UUID.randomUUID();
+    }
+
+    public ConstantPitch(UUID id) {
+        PMOD_ID = id;
     }
 
     // REQUIRES: 0 <= time <= 1, sampleRate > 0
     // EFFECTS: Returns the period in samples of the waveform's oscillation as a function of the current sampleRate
-    public double getPeriodAtTime(double time, float sampleRate) {
-        return sampleRate / pitch;
+    public double getPeriodAtTime(double basePitch, double time, float sampleRate) {
+        return sampleRate / basePitch;
     }
 
-    // Getters and Setters
-
-    public double getPitch() {
-        return pitch;
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("uuid", PMOD_ID.toString());
+        return json;
     }
 
-    public void setPitch(double pitch) {
-        this.pitch = pitch;
+    public UUID getUuid() {
+        return PMOD_ID;
     }
 
 }

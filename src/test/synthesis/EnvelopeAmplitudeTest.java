@@ -13,7 +13,7 @@ public class EnvelopeAmplitudeTest {
 
     private EnvelopeAmplitude amplitudeOne;
     private EnvelopeAmplitude amplitudeTwo;
-    private double[] wave;
+    private ArrayList<Double> wave;
     private AudioFormat format;
 
     @BeforeEach
@@ -44,7 +44,7 @@ public class EnvelopeAmplitudeTest {
 
     @Test
     public void testApplyAmplitudeProfileOne() {
-        double[] expected = {0.5,1,0.5,1,0.5,1,0.5,1,0.5,1};
+        ArrayList<Double> expected = {0.5,1,0.5,1,0.5,1,0.5,1,0.5,1};
         amplitudeOne.applyAmplitudeProfile(wave, format);
 
         for (int i = 0; i < 10; i++){
@@ -54,7 +54,7 @@ public class EnvelopeAmplitudeTest {
 
     @Test
     public void testApplyAmplitudeProfileTwo() {
-        double[] expected = {0,0,0.5,0.5,0.5,0.5,0.4,0.4,0.2,0.2};
+        ArrayList<Double> expected = {0,0,0.5,0.5,0.5,0.5,0.4,0.4,0.2,0.2};
         amplitudeTwo = new EnvelopeAmplitude(0.5, 0.1, 0.5, 0);
         amplitudeTwo.applyAmplitudeProfile(wave, format);
 

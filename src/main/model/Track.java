@@ -1,31 +1,47 @@
 package model;
 
+import org.json.JSONArray;
+import org.json.JSONObject;
+import persistence.Persistent;
 import synthesis.Instrument;
+import synthesis.SampleUtil;
 
 import javax.sound.sampled.AudioFormat;
-import java.io.ByteArrayOutputStream;
-import java.io.IOException;
 import java.util.*;
 
+import static persistence.PersistenceUtil.mapToJson;
+
 // Represents a track, which contains a set of notes and an associated instrument they may be played with
-public class Track implements Playable {
+public class Track implements Playable, Persistent {
+
+    private final UUID TRACK_ID;
+
     private Map<Integer, Note> notes;
     private Instrument instrument;
+
+    private boolean muted;
 
     // REQUIRES: instrument is not null
     // EFFECTS: Constructs a new track with the given instrument and no notes
     public Track(Instrument instrument) {
+        TRACK_ID = UUID.randomUUID();
         this.instrument = instrument;
         this.notes = new TreeMap<>();
+        this.muted = false;
     }
 
-    // REQUIRES: format has a valid configuration, and encoding is PCM_SIGNED
-    // EFFECTS: Generates a byte array containing the full encoded audio in the given track.
-    //          Throws on failure to initialize output stream.
-    //          Returns empty array if no audio is present.
-    public byte[] synthesizeWaveform(AudioFormat format) throws IOException {
-        double[] buffer;
-        ByteArrayOutputStream output = new ByteArrayOutputStream();
+    // REQUIRES: instrument is not null
+    // EFFECTS: Constructs a new track with the given instrument and UUID and no notes
+    public Track(Instrument instrument, UUID id) {
+        TRACK_ID = id;
+        this.instrument = instrument;
+        this.notes = new TreeMap<>();
+        this.muted = false;
+    }
+
+    public ArrayList<Double> synthesizeWaveform(AudioFormat format) {
+        ArrayList<Double> output = new ArrayList<Double>();
+
         Set<Integer> keySet = notes.keySet();
         int numSilentSamples;
         Note note;
@@ -33,34 +49,23 @@ public class Track implements Playable {
         for (Integer timeStamp : keySet) {
             numSilentSamples = timeStamp  * format.getFrameSize() - output.size();
             for (int i = 0; i < numSilentSamples; i++) {
-                output.write(0);
+                output.add(0.);
             }
 
             note = notes.get(timeStamp);
-            buffer = note.synthesizeSample(format, instrument);
-            output.write(encodeBytes(buffer, format));
-        }
-
-        return output.toByteArray();
-
-    }
-
-    // REQUIRES: waveform generated using the same format given, encoding is PCM_SIGNED
-    // EFFECTS: Converts double sample array to a PCM_SIGNED encoded byte array, and returns it
-    public static byte[] encodeBytes(double[] waveform, AudioFormat format) {
-        int bytesPerSample = format.getFrameSize() / format.getChannels();
-        byte[] output = new byte[bytesPerSample * waveform.length];
-
-        for (int i = 0; i < waveform.length; i++) {
-            int sample = (int) waveform[i];
-            for (int j = 0; j < bytesPerSample; j++) {
-                output[i * bytesPerSample + j] = (byte) (sample >> (8 * j));
-            }
+            output.addAll(note.synthesizeWaveform(format, instrument));
         }
 
         return output;
     }
 
+    // REQUIRES: format has a valid configuration, and encoding is PCM_SIGNED
+    // EFFECTS: Generates a byte array containing the full encoded audio in the given track.
+    //          Throws on failure to initialize output stream.
+    //          Returns empty array if no audio is present.
+    public byte[] synthesizeClip(AudioFormat format) {
+        return SampleUtil.encodeBytes(synthesizeWaveform(format), format);
+    }
 
     // REQUIRES: timeStamp >= 0, note is not null and does not overlap any existing notes in the track
     // MODIFIES: this
@@ -79,7 +84,28 @@ public class Track implements Playable {
         return prev != null;
     }
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("uuid", TRACK_ID.toString());
+        json.put("instrument_uuid", instrument.getUuid().toString());
+        json.put("notes", mapToJson(notes));
+        return null;
+    }
+
     // Getters and Setters
+
+    public UUID getUuid() {
+        return TRACK_ID;
+    }
+
+    public boolean isMuted() {
+        return muted;
+    }
+
+    public void setMuted(boolean muted) {
+        this.muted = muted;
+    }
 
     public Map<Integer, Note> getNotes() {
         return notes;

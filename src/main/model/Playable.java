@@ -8,6 +8,6 @@ public interface Playable {
 
     // REQUIRES: format has a valid configuration, and encoding is PCM_SIGNED
     // EFFECTS: Return a byte array representation of the audio source in the given format
-    byte[] synthesizeWaveform(AudioFormat format) throws IOException;
+    byte[] synthesizeClip(AudioFormat format);
 
 }

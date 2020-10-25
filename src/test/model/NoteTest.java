@@ -30,33 +30,33 @@ public class NoteTest {
     public void testGetSet() {
         note = new Note(null, null, 0);
 
-        Assertions.assertNull(note.getAmplitude());
-        Assertions.assertNull(note.getPitch());
+        Assertions.assertNull(note.getAmpMod());
+        Assertions.assertNull(note.getPitchMod());
         Assertions.assertEquals(0, note.getDuration());
 
-        note.setAmplitude(ampProfile);
-        note.setPitch(pitch);
+        note.setAmpMod(ampProfile);
+        note.setPitchMod(pitch);
         note.setDuration(5);
 
-        Assertions.assertEquals(ampProfile, note.getAmplitude());
-        Assertions.assertEquals(pitch, note.getPitch());
+        Assertions.assertEquals(ampProfile, note.getAmpMod());
+        Assertions.assertEquals(pitch, note.getPitchMod());
         Assertions.assertEquals(5, note.getDuration());
     }
 
     @Test
-    public void testSynthesizeSample() {
+    public void testsynthesizeWaveform() {
         note = new Note(ampProfile, pitch, 5);
         Instrument sine = new SinusoidInstrument();
-        double[] expected1 = {0,0,1119.1115355996615,2238.223071199323,2787.562296387709,5575.124592775418,
+        ArrayList<Double> expected1 = {0,0,1119.1115355996615,2238.223071199323,2787.562296387709,5575.124592775418,
                 4155.876702773368,8311.753405546737,5493.83939527089,10987.67879054178};
-        double[] expected2 = {0,0,560.0672955094373,560.0672955094373,1398.889419499577,1398.889419499577,
+        ArrayList<Double> expected2 = {0,0,560.0672955094373,560.0672955094373,1398.889419499577,1398.889419499577,
                 2095.1394170389462,2095.1394170389462,2787.562296387709,2787.562296387709};
 
-        double[] wave1 = note.synthesizeSample(format, sine);
+        ArrayList<Double> wave1 = note.synthesizeWaveform(format, sine);
         pitch.setPitch(300);
         ampProfile.setAmplitude(0.5);
         ampProfile.setBalance(0);
-        double[] wave2 = note.synthesizeSample(format, sine);
+        ArrayList<Double> wave2 = note.synthesizeWaveform(format, sine);
 
         for (int i = 0; i < 10; i++){
             Assertions.assertEquals(expected1[i], wave1[i]);

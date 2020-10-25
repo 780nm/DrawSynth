@@ -1,37 +1,91 @@
 package model;
 
+import org.json.JSONObject;
+import persistence.Persistent;
 import synthesis.AmplitudeModulator;
 import synthesis.Instrument;
 import synthesis.PitchModulator;
 
 import javax.sound.sampled.AudioFormat;
+import java.util.ArrayList;
+import java.util.UUID;
 
 // Represents a single note, which may be played in a track
-public class Note {
+public class Note implements Persistent {
 
-    private AmplitudeModulator amplitude;
-    private PitchModulator pitch;
+    private final UUID NOTE_ID;
 
+    private AmplitudeModulator ampMod;
+    private PitchModulator pitchMod;
+
+    private double basePitch;
+    private double baseAmplitude; 
+    
     private int duration;
 
     // REQUIRES: duration > 0, amplitude and pitch are not null
     // EFFECTS: Constructs a note with the given amplitude, pitch and duration
-    public Note(AmplitudeModulator amplitude, PitchModulator pitch, int duration) {
-        this.amplitude = amplitude;
-        this.pitch = pitch;
+    public Note(double baseAmplitude, AmplitudeModulator ampMod,
+                double basePitch, PitchModulator pitchMod, int duration) {
+        NOTE_ID = UUID.randomUUID();
+        this.baseAmplitude = baseAmplitude;
+        this.basePitch = basePitch;
+        this.ampMod = ampMod;
+        this.pitchMod = pitchMod;
+        this.duration = duration;
+    }
+
+    public Note(double baseAmplitude, AmplitudeModulator ampMod,
+                double basePitch, PitchModulator pitchMod, int duration, UUID id) {
+        NOTE_ID = id;
+        this.baseAmplitude = baseAmplitude;
+        this.basePitch = basePitch;
+        this.ampMod = ampMod;
+        this.pitchMod = pitchMod;
         this.duration = duration;
     }
 
     // REQUIRES: format has a valid configuration, and encoding is PCM_SIGNED, instrument is not null
     // EFFECTS: Generates a double array containing the full audio of the note,
     //          as played with the given instrument.
-    public double[] synthesizeSample(AudioFormat format, Instrument instrument) {
-        double[] wave = instrument.synthesizeSample(pitch, duration, format);
-        amplitude.applyAmplitudeProfile(wave, format);
+    public ArrayList<Double> synthesizeWaveform(AudioFormat format, Instrument instrument) {
+        ArrayList<Double> wave = instrument.synthesizeWaveform(basePitch, pitchMod, duration, format);
+        ampMod.applyAmplitudeProfile(baseAmplitude, wave, format);
         return wave;
     }
 
+    @Override
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("ampMod", ampMod.getUuid());
+        json.put("pitchMod", pitchMod.getUuid());
+        json.put("bAmp", baseAmplitude);
+        json.put("bPitch", basePitch);
+        json.put("duration", duration);
+        return json;
+    }
+
     // Getters and Setters
+
+    public UUID getUuid() {
+        return NOTE_ID;
+    }
+
+    public double getBasePitch() {
+        return basePitch;
+    }
+
+    public void setBasePitch(double basePitch) {
+        this.basePitch = basePitch;
+    }
+
+    public double getBaseAmplitude() {
+        return baseAmplitude;
+    }
+
+    public void setBaseAmplitude(double baseAmplitude) {
+        this.baseAmplitude = baseAmplitude;
+    }
 
     public int getDuration() {
         return duration;
@@ -41,20 +95,20 @@ public class Note {
         this.duration = duration;
     }
 
-    public PitchModulator getPitch() {
-        return pitch;
+    public PitchModulator getPitchMod() {
+        return pitchMod;
     }
 
-    public void setPitch(PitchModulator pitch) {
-        this.pitch = pitch;
+    public void setPitchMod(PitchModulator pitchMod) {
+        this.pitchMod = pitchMod;
     }
 
-    public AmplitudeModulator getAmplitude() {
-        return amplitude;
+    public AmplitudeModulator getAmpMod() {
+        return ampMod;
     }
 
-    public void setAmplitude(AmplitudeModulator amplitude) {
-        this.amplitude = amplitude;
+    public void setAmpMod(AmplitudeModulator ampMod) {
+        this.ampMod = ampMod;
     }
 
 }

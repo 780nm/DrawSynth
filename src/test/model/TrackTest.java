@@ -82,7 +82,7 @@ public class TrackTest {
     }
 
     @Test
-    public void testSynthesizeWaveform() {
+    public void testsynthesizeClip() {
         byte[] expected = {0,0,0,0,-19,10,-19,10,-57,21,-57,21,
                 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-19,10,-19,10,-57,21,-57,21};
         byte[] wave = new byte[0];
@@ -91,7 +91,7 @@ public class TrackTest {
         track.addNote(0, note2);
 
         try {
-            wave = track.synthesizeWaveform(format);
+            wave = track.synthesizeClip(format);
         } catch (IOException exception) {
             fail();
         }
@@ -104,7 +104,7 @@ public class TrackTest {
 
     @Test
     public void testEncodeBytesEmpty() {
-        double[] emptyWave = new double[10];
+        ArrayList<Double> emptyWave = new double[10];
         Arrays.fill(emptyWave, 0);
 
         byte[] encodedSample = Track.encodeBytes(emptyWave, format);
@@ -117,7 +117,7 @@ public class TrackTest {
 
     @Test
     public void testEncodeBytesSample() {
-        double[] sampleWave = {0,0,1000,1000,0,0,-1000,-1000,0,0};
+        ArrayList<Double> sampleWave = {0,0,1000,1000,0,0,-1000,-1000,0,0};
 
         byte[] expected = {0,0,0,0,-24,3,-24,3,0,0,0,0,24,-4,24,-4,0,0,0,0};
         byte[] encodedSample = Track.encodeBytes(sampleWave, format);
