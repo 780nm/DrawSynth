@@ -3,6 +3,7 @@ package ui;
 import java.util.Arrays;
 import java.util.InputMismatchException;
 import java.util.Scanner;
+import java.util.regex.Pattern;
 
 //Handles console input collection and filtering
 public class InputHandler {
@@ -26,7 +27,7 @@ public class InputHandler {
                 System.err.println("Error processing input: " + exception);
             } finally {
                 input.nextLine();
-                if (eval.evaluate(temp) && temp % 1 == 0) {
+                if (temp % 1 == 0 && eval.evaluate(temp)) {
                     return (int) temp;
                 } else {
                     System.out.println(errorMsg);
@@ -63,6 +64,20 @@ public class InputHandler {
             System.out.print(msg);
             final String temp = input.nextLine();
             if (Arrays.stream(acceptableAnswers).anyMatch(temp::equalsIgnoreCase)) {
+                return temp;
+            } else {
+                System.out.println(errorMsg);
+            }
+        }
+    }
+
+    // REQUIRES: regex, msg and errorMsg are not null
+    // EFFECTS: polls user for input until a string answer matching the regex is input
+    public String getSafeString(String regex, String msg, String errorMsg) {
+        while (true) {
+            System.out.print(msg);
+            final String temp = input.nextLine();
+            if (Pattern.matches(regex, temp)) {
                 return temp;
             } else {
                 System.out.println(errorMsg);

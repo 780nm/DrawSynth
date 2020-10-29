@@ -84,12 +84,7 @@ public class Player implements Runnable {
         byte[] waveform;
         byte[] buffer;
 
-        try {
-            waveform = target.synthesizeClip(format);
-        } catch (IOException exception) {
-            stop("Error during playback: " + exception);
-            return;
-        }
+        waveform = target.synthesizeClip(format);
 
         int count = 0;
         while (count < waveform.length) {
