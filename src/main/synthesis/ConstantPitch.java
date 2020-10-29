@@ -7,14 +7,14 @@ import java.util.UUID;
 // Unchanging PitchModulator
 public class ConstantPitch implements PitchModulator {
 
-    private final UUID PMOD_ID;
+    private UUID pitchModId;
 
     public ConstantPitch() {
-        PMOD_ID = UUID.randomUUID();
+        pitchModId = UUID.randomUUID();
     }
 
     public ConstantPitch(UUID id) {
-        PMOD_ID = id;
+        pitchModId = id;
     }
 
     // REQUIRES: 0 <= time <= 1, sampleRate > 0
@@ -25,12 +25,14 @@ public class ConstantPitch implements PitchModulator {
 
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-        json.put("uuid", PMOD_ID.toString());
+        json.put("uuid", pitchModId.toString());
+        json.put("class", this.getClass().getName());
         return json;
     }
 
+    // EFFECTS: Returns the state of the Object as a serialized JSONObject
     public UUID getUuid() {
-        return PMOD_ID;
+        return pitchModId;
     }
 
 }

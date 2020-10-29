@@ -9,25 +9,25 @@ import java.util.UUID;
 // Represents a typical envelope-based note amplitude profile
 public class EnvelopeAmplitude implements AmplitudeModulator {
 
-    private final UUID EAMP_ID;
+    private UUID ampModID;
 
     double attack;
     double decay;
     double balance;
 
-    // REQUIRES: all of amplitude, attack, decay are in [0,1]; attack + decay <= 1; -1 <= balance <= 1
+    // REQUIRES: all of attack, decay are in [0,1]; attack + decay <= 1; -1 <= balance <= 1
     // EFFECTS: Constructs an EnvelopeAmplitude modulator
     public EnvelopeAmplitude(double attack, double decay, double balance) {
-        EAMP_ID = UUID.randomUUID();
+        ampModID = UUID.randomUUID();
         this.attack = attack;
         this.decay = decay;
         this.balance = balance;
     }
 
-    // REQUIRES: all of amplitude, attack, decay are in [0,1]; attack + decay <= 1; -1 <= balance <= 1
+    // REQUIRES: all of attack, decay are in [0,1]; attack + decay <= 1; -1 <= balance <= 1
     // EFFECTS: Constructs an EnvelopeAmplitude modulator
     public EnvelopeAmplitude(double attack, double decay, double balance, UUID id) {
-        EAMP_ID = id;
+        ampModID = id;
         this.attack = attack;
         this.decay = decay;
         this.balance = balance;
@@ -63,6 +63,8 @@ public class EnvelopeAmplitude implements AmplitudeModulator {
         }
     }
 
+    // MODIFIES: wave
+    // EFFECTS: Manipulates waveform balance given current profile settings
     private void applyBalanceProfile(ArrayList<Double> wave, int channels, int i) {
         if (channels == 2 && balance != 0) {
             double leftScale = Math.min(1, 1 - balance);
@@ -73,20 +75,22 @@ public class EnvelopeAmplitude implements AmplitudeModulator {
         }
     }
 
+    // EFFECTS: Returns the state of the Note as a serialized JSONObject
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-        json.put("uuid", EAMP_ID.toString());
+        json.put("uuid", ampModID.toString());
+        json.put("class", this.getClass().getName());
         json.put("attack", attack);
         json.put("decay", decay);
         json.put("balance", balance);
         return json;
     }
 
-    public UUID getUuid() {
-        return EAMP_ID;
-    }
-
     // Getters and Setters
+
+    public UUID getUuid() {
+        return ampModID;
+    }
 
     public double getAttack() {
         return attack;

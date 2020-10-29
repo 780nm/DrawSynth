@@ -9,6 +9,7 @@ import java.util.ArrayList;
 public interface AmplitudeModulator extends Persistent {
 
     // REQUIRES: format has a valid configuration, and encoding is PCM_SIGNED, instrument is not null
+    // MODIFIES: wave
     // EFFECTS: Manipulates the given byte array as per the associated amplitude specification
     void applyAmplitudeProfile(double baseAmplitude, ArrayList<Double> wave, AudioFormat format);
 }

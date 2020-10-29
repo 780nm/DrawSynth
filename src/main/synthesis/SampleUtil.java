@@ -23,6 +23,8 @@ public class SampleUtil {
         return output;
     }
 
+    // REQUIRES: waveforms all synthesized using given format, encoding is PCM_SIGNED
+    // EFFECTS: returns a single Double ArrayList representing the composite of the given waveforms
     public static ArrayList<Double> downMix(ArrayList<ArrayList<Double>> waveforms, AudioFormat format) {
         int tracks = waveforms.size();
         int maxLength = 0;
@@ -40,7 +42,7 @@ public class SampleUtil {
             double sample = 0;
             for (int j = 0; j < tracks; j++) {
                 if (i < lengths[j]) {
-                    sample +=  waveforms.get(j).get(j);
+                    sample +=  waveforms.get(j).get(i);
                 }
             }
             maxSample = Math.max(Math.abs(sample), maxSample);
@@ -52,6 +54,8 @@ public class SampleUtil {
         return output;
     }
 
+    // MODIFIES: wave
+    // EFFECTS: Normalizes wave to given format, with a given maxSample as reference
     private static void applyNormalization(ArrayList<Double> wave, double maxSample, AudioFormat format) {
         double maxVal = Math.pow(2, format.getSampleSizeInBits() - 1);
         if (maxVal < maxSample) {

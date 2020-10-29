@@ -1,6 +1,6 @@
 package model;
 
-import org.json.JSONArray;
+import exceptions.NoteIntersectionException;
 import org.json.JSONObject;
 import persistence.Persistent;
 import synthesis.Instrument;
@@ -14,7 +14,7 @@ import static persistence.PersistenceUtil.mapToJson;
 // Represents a track, which contains a set of notes and an associated instrument they may be played with
 public class Track implements Playable, Persistent {
 
-    private final UUID TRACK_ID;
+    private UUID trackID;
 
     private Map<Integer, Note> notes;
     private Instrument instrument;
@@ -22,9 +22,9 @@ public class Track implements Playable, Persistent {
     private boolean muted;
 
     // REQUIRES: instrument is not null
-    // EFFECTS: Constructs a new track with the given instrument and no notes
+    // EFFECTS: Constructs a new track with the given instrument, no notes and a random UUID
     public Track(Instrument instrument) {
-        TRACK_ID = UUID.randomUUID();
+        trackID = UUID.randomUUID();
         this.instrument = instrument;
         this.notes = new TreeMap<>();
         this.muted = false;
@@ -33,14 +33,16 @@ public class Track implements Playable, Persistent {
     // REQUIRES: instrument is not null
     // EFFECTS: Constructs a new track with the given instrument and UUID and no notes
     public Track(Instrument instrument, UUID id) {
-        TRACK_ID = id;
+        trackID = id;
         this.instrument = instrument;
         this.notes = new TreeMap<>();
         this.muted = false;
     }
 
+    // REQUIRES: format has a valid configuration, and encoding is PCM_SIGNED
+    // EFFECTS: Generates a Double ArrayList containing the full encoded audio in the given track.
     public ArrayList<Double> synthesizeWaveform(AudioFormat format) {
-        ArrayList<Double> output = new ArrayList<Double>();
+        ArrayList<Double> output = new ArrayList<>();
 
         Set<Integer> keySet = notes.keySet();
         int numSilentSamples;
@@ -61,17 +63,21 @@ public class Track implements Playable, Persistent {
 
     // REQUIRES: format has a valid configuration, and encoding is PCM_SIGNED
     // EFFECTS: Generates a byte array containing the full encoded audio in the given track.
-    //          Throws on failure to initialize output stream.
-    //          Returns empty array if no audio is present.
     public byte[] synthesizeClip(AudioFormat format) {
         return SampleUtil.encodeBytes(synthesizeWaveform(format), format);
     }
 
-    // REQUIRES: timeStamp >= 0, note is not null and does not overlap any existing notes in the track
+    // REQUIRES: timeStamp >= 0, note is not null
     // MODIFIES: this
     // EFFECTS: Adds note to track at specified timeStamp, in samples.
-    //          returns true if there was already a note at that timeStamp, false otherwise
-    public boolean addNote(Integer timeStamp, Note note) {
+    //          Returns true if there was already a note at that timeStamp, false otherwise.
+    //          Throws NoteIntersectionException is note overlaps with notes already in the track
+    public boolean addNote(Integer timeStamp, Note note) throws NoteIntersectionException {
+        for (Map.Entry<Integer, Note> entry : notes.entrySet()) {
+            if (entry.getKey() < timeStamp && entry.getKey() + entry.getValue().getDuration() > timeStamp) {
+                throw new NoteIntersectionException();
+            }
+        }
         Note prev = notes.put(timeStamp, note);
         return prev != null;
     }
@@ -84,19 +90,26 @@ public class Track implements Playable, Persistent {
         return prev != null;
     }
 
+    // EFFECTS: Returns the state of the Note as a serialized JSONObject
     @Override
     public JSONObject toJson() {
+        Map<Integer, String> noteUuids = new TreeMap<>();
+
+        for (Map.Entry<Integer, Note> entry : notes.entrySet()) {
+            noteUuids.put(entry.getKey(), entry.getValue().getUuid().toString());
+        }
+
         JSONObject json = new JSONObject();
-        json.put("uuid", TRACK_ID.toString());
-        json.put("instrument_uuid", instrument.getUuid().toString());
-        json.put("notes", mapToJson(notes));
-        return null;
+        json.put("uuid", trackID.toString());
+        json.put("instrument", instrument.getUuid().toString());
+        json.put("notes", mapToJson(noteUuids));
+        return json;
     }
 
     // Getters and Setters
 
     public UUID getUuid() {
-        return TRACK_ID;
+        return trackID;
     }
 
     public boolean isMuted() {

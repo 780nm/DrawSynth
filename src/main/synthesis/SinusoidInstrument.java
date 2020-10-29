@@ -8,22 +8,23 @@ import java.util.UUID;
 
 public class SinusoidInstrument implements Instrument {
 
-    private final UUID INSTR_ID;
+    private UUID instrumentID;
 
     public SinusoidInstrument() {
-        INSTR_ID = UUID.randomUUID();
+        instrumentID = UUID.randomUUID();
     }
 
     public SinusoidInstrument(UUID id) {
-        INSTR_ID = id;
+        instrumentID = id;
     }
 
     // REQUIRES: format has a valid configuration, and encoding is PCM_SIGNED, pitch is not null
-    // EFFECTS: Return a double array representation of the audio source in the given format,
+    // EFFECTS: Return a Double ArrayList representation of the audio source in the given format,
     //          as a function of the given pitch modulator and duration
-    public ArrayList<Double> synthesizeWaveform(double basePitch, PitchModulator pitchMod, int duration, AudioFormat format) {
+    public ArrayList<Double> synthesizeWaveform(double basePitch, PitchModulator pitchMod,
+                                                int duration, AudioFormat format) {
         int channels = format.getChannels();
-        ArrayList<Double> wave = new ArrayList<Double>(duration * format.getChannels());
+        ArrayList<Double> wave = new ArrayList<>(duration * format.getChannels());
         double scale = Math.pow(2, format.getSampleSizeInBits() - 1);
         int finalIndex = duration * channels - channels + 1;
 
@@ -43,14 +44,18 @@ public class SinusoidInstrument implements Instrument {
         return wave;
     }
 
+    // EFFECTS: Returns the state of the Note as a serialized JSONObject
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
-        json.put("uuid", INSTR_ID.toString());
+        json.put("uuid", instrumentID.toString());
+        json.put("class", this.getClass().getName());
         return json;
     }
 
+    // Getters
+
     public UUID getUuid() {
-        return INSTR_ID;
+        return instrumentID;
     }
 
 }

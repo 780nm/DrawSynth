@@ -13,21 +13,22 @@ import java.util.UUID;
 // Represents a single note, which may be played in a track
 public class Note implements Persistent {
 
-    private final UUID NOTE_ID;
+    private UUID noteID;
 
     private AmplitudeModulator ampMod;
     private PitchModulator pitchMod;
 
+    private double baseAmplitude;
     private double basePitch;
-    private double baseAmplitude; 
     
     private int duration;
 
-    // REQUIRES: duration > 0, amplitude and pitch are not null
-    // EFFECTS: Constructs a note with the given amplitude, pitch and duration
+    // REQUIRES: duration > 0, amplitude and pitch are not null.
+    // EFFECTS: Constructs a note with the given amplitude, amplitude modulator,
+    //          pitch, pitch modulator, duration and a random UUID.
     public Note(double baseAmplitude, AmplitudeModulator ampMod,
                 double basePitch, PitchModulator pitchMod, int duration) {
-        NOTE_ID = UUID.randomUUID();
+        noteID = UUID.randomUUID();
         this.baseAmplitude = baseAmplitude;
         this.basePitch = basePitch;
         this.ampMod = ampMod;
@@ -35,9 +36,12 @@ public class Note implements Persistent {
         this.duration = duration;
     }
 
+    // REQUIRES: duration > 0, amplitude, pitch and id are not null.
+    // EFFECTS: Constructs a note with the given amplitude, amplitude modulator,
+    //          pitch, pitch modulator, duration and UUID.
     public Note(double baseAmplitude, AmplitudeModulator ampMod,
                 double basePitch, PitchModulator pitchMod, int duration, UUID id) {
-        NOTE_ID = id;
+        noteID = id;
         this.baseAmplitude = baseAmplitude;
         this.basePitch = basePitch;
         this.ampMod = ampMod;
@@ -46,7 +50,7 @@ public class Note implements Persistent {
     }
 
     // REQUIRES: format has a valid configuration, and encoding is PCM_SIGNED, instrument is not null
-    // EFFECTS: Generates a double array containing the full audio of the note,
+    // EFFECTS: Generates a Double ArrayList containing the full audio of the note,
     //          as played with the given instrument.
     public ArrayList<Double> synthesizeWaveform(AudioFormat format, Instrument instrument) {
         ArrayList<Double> wave = instrument.synthesizeWaveform(basePitch, pitchMod, duration, format);
@@ -54,9 +58,11 @@ public class Note implements Persistent {
         return wave;
     }
 
+    // EFFECTS: Returns the state of the Note as a serialized JSONObject
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
+        json.put("uuid", noteID.toString());
         json.put("ampMod", ampMod.getUuid());
         json.put("pitchMod", pitchMod.getUuid());
         json.put("bAmp", baseAmplitude);
@@ -68,7 +74,7 @@ public class Note implements Persistent {
     // Getters and Setters
 
     public UUID getUuid() {
-        return NOTE_ID;
+        return noteID;
     }
 
     public double getBasePitch() {
