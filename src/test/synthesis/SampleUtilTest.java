@@ -15,6 +15,7 @@ public class SampleUtilTest {
 
     @BeforeEach
     public void initTests() {
+        SampleUtil util = new SampleUtil(); // Note that all methods are static
         format = new AudioFormat(PCM_SIGNED, 44100, 16, 2, 4, 44100, false);
     }
 

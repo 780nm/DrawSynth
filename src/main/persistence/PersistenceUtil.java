@@ -11,7 +11,7 @@ import java.util.Set;
 import java.util.UUID;
 
 // JSON Serialization helpers
-public abstract class PersistenceUtil {
+public class PersistenceUtil {
 
     // EFFECTS: Returns a JSONObject representing the data in the given ArrayList
     public static JSONArray arrayToJson(ArrayList<? extends Persistent> objects) {

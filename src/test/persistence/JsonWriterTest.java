@@ -22,6 +22,11 @@ import static persistence.PersistenceTestUtil.evalFileEquality;
 public class JsonWriterTest {
 
     @Test
+    public void testUtil() {
+        PersistenceUtil util = new PersistenceUtil(); // Note that all methods are static
+    }
+
+    @Test
     public void testWriteJSONTypical() {
         Sequencer seq = new Sequencer(UUID.fromString("89c16b13-c8b3-4840-9d0f-e6beab09c5ed"));
 
