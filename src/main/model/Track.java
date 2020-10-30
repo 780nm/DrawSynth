@@ -72,7 +72,7 @@ public class Track implements Playable, Persistent {
     // EFFECTS: Adds note to track at specified timeStamp, in samples.
     //          Returns true if there was already a note at that timeStamp, false otherwise.
     //          Throws NoteIntersectionException is note overlaps with notes already in the track
-    public boolean addNote(Integer timeStamp, Note note) throws NoteIntersectionException {
+    public boolean addNote(Integer timeStamp, Note note) {
         for (Map.Entry<Integer, Note> entry : notes.entrySet()) {
             if (entry.getKey() < timeStamp && entry.getKey() + entry.getValue().getDuration() > timeStamp) {
                 throw new NoteIntersectionException();

@@ -1,6 +1,13 @@
 package ui;
 
 import exceptions.ElementNotFoundException;
+import synthesis.SampleUtil;
+
+import javax.sound.sampled.AudioFormat;
+import java.lang.reflect.Array;
+import java.util.ArrayList;
+
+import static javax.sound.sampled.AudioFormat.Encoding.PCM_SIGNED;
 
 public class Main {
 

@@ -3,7 +3,7 @@ package synthesis;
 import javax.sound.sampled.AudioFormat;
 import java.util.ArrayList;
 
-public class SampleUtil {
+public abstract class SampleUtil {
 
     // REQUIRES: waveform generated using the same format given, encoding is PCM_SIGNED
     // EFFECTS: Converts double sample array to a PCM_SIGNED encoded byte array, and returns it

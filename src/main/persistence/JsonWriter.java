@@ -13,7 +13,6 @@ public class JsonWriter {
     private static final int INDENT_FACTOR = 4;
 
     private String fileName;
-    private PrintWriter writer;
 
     // EFFECTS: Initializes writer with given filename
     public JsonWriter(String fileName) {
@@ -22,7 +21,7 @@ public class JsonWriter {
 
     // EFFECTS: Initializes output and writes serialized model data to file
     public void write(Sequencer seq) throws FileNotFoundException {
-        writer = new PrintWriter(new File(fileName));
+        PrintWriter writer = new PrintWriter(new File(fileName));
         JSONObject json = seq.toJson();
         writer.print(json.toString(INDENT_FACTOR));
         writer.close();

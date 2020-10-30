@@ -1,0 +1,60 @@
+{
+    "notes": [
+        {
+            "duration": 44100,
+            "ampMod": "5d6d92bc-5f20-414a-826e-2d30487607f3",
+            "pitchMod": "2dbaca2d-8ecf-4ee0-837f-f42094c0a579",
+            "uuid": "2a0f2a30-dd45-4f06-ab54-27d5a183aac3",
+            "bPitch": 300,
+            "bAmp": 0.5
+        },
+        {
+            "duration": 20000,
+            "ampMod": "4dfd9d8e-cbbf-434e-91ce-4ded4c27a35a",
+            "pitchMod": "2dbaca2d-8ecf-4ee0-837f-f42094c0a579",
+            "uuid": "2deaca2d-8ecf-4ee0-837f-f42094c0a579",
+            "bPitch": 600,
+            "bAmp": 0.5
+        }
+    ],
+    "instruments": [{
+        "uuid": "2a0f2a30-dd45-4f06-ab54-27d56183aac3",
+        "class": "synthesis.SinusoidInstrument"
+    }],
+    "uuid": "13bcbfc9-1474-40ad-b541-d10a52cddabc",
+    "pitchMods": [{
+        "uuid": "2dbaca2d-8ecf-4ee0-837f-f42094c0a579",
+        "class": "UNDEFINED"
+    }],
+    "ampMods": [
+        {
+            "balance": 0.5,
+            "attack": 0.1,
+            "decay": -0.3,
+            "uuid": "5d6d92bc-5f20-414a-826e-2d30487607f3",
+            "class": "synthesis.EnvelopeAmplitude"
+        },
+        {
+            "balance": 0.1,
+            "attack": 0.5,
+            "decay": 0.3,
+            "uuid": "4dfd9d8e-cbbf-434e-91ce-4ded4c27a35a",
+            "class": "synthesis.EnvelopeAmplitude"
+        }
+    ],
+    "tracks": [
+        {
+            "notes": {
+                "0": "2a0f2a30-dd45-4f06-ab54-27d5a183aac3",
+                "50000": "2deaca2d-8ecf-4ee0-837f-f42094c0a579"
+            },
+            "instrument": "2a0f2a30-dd45-4f06-ab54-27d56183aac3",
+            "uuid": "f3a23ae6-2b03-44dd-af06-4468d185c25b"
+        },
+        {
+            "notes": {"0": "2deaca2d-8ecf-4ee0-837f-f42094c0a579"},
+            "instrument": "2a0f2a30-dd45-4f06-ab54-27d56183aac3",
+            "uuid": "e1ac000c-045b-4a4a-ac0c-78bd8a50a91c"
+        }
+    ]
+}

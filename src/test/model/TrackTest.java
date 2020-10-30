@@ -1,17 +1,17 @@
 package model;
 
-import org.junit.jupiter.api.Assertions;
+import exceptions.NoteIntersectionException;
+
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import static org.junit.jupiter.api.Assertions.*;
+
 import synthesis.*;
 
 import javax.sound.sampled.AudioFormat;
-
-import java.io.IOException;
-import java.util.Arrays;
-
 import static javax.sound.sampled.AudioFormat.Encoding.PCM_SIGNED;
-import static org.junit.jupiter.api.Assertions.fail;
+
+import java.util.UUID;
 
 public class TrackTest {
 
@@ -29,10 +29,10 @@ public class TrackTest {
     public void initTests() {
         format = new AudioFormat(PCM_SIGNED, 44100, 16, 2, 4, 44100, false);
 
-        ampProfile = new EnvelopeAmplitude(1,0.25,0, 0);
-        pitch = new ConstantPitch(600);
-        note = new Note(ampProfile, pitch, 3);
-        note2 = new Note(ampProfile, pitch, 3);
+        ampProfile = new EnvelopeAmplitude(0.25,0, 0);
+        pitch = new ConstantPitch();
+        note = new Note(1, ampProfile, 600, pitch, 3);
+        note2 = new Note(1, ampProfile, 600, pitch, 3);
 
         instrument = new SinusoidInstrument();
 
@@ -40,90 +40,107 @@ public class TrackTest {
     }
 
     @Test
-    public void testGetSetInstrument() {
-        Assertions.assertEquals(instrument, track.getInstrument());
-        Instrument sine2 = new SinusoidInstrument();
-        track.setInstrument(sine2);
-        Assertions.assertEquals(sine2, track.getInstrument());
+    public void testCustomUuid() {
+        UUID id = UUID.randomUUID();
+        track = new Track(instrument, id);
+        assertEquals(id, track.getUuid());
     }
 
     @Test
-    public void testAddNote() {
-        Assertions.assertTrue(track.getNotes().isEmpty());
-        Assertions.assertFalse(track.addNote(0, note));
-        Assertions.assertTrue(track.addNote(0, note2));
+    public void testGetSetMuted() {
+        assertFalse(track.isMuted());
+        track.setMuted(true);
+        assertTrue(track.isMuted());
+    }
 
-        Assertions.assertEquals(1, track.getNotes().size());
-        Assertions.assertEquals(note2, track.getNotes().get(0));
+    @Test
+    public void testGetSetInstrument() {
+        assertEquals(instrument, track.getInstrument());
+        Instrument sine2 = new SinusoidInstrument();
+        track.setInstrument(sine2);
+        assertEquals(sine2, track.getInstrument());
+    }
 
-        Assertions.assertFalse(track.addNote(6, note));
+    @Test
+    public void testAddNoteNoOverlap() {
+        assertTrue(track.getNotes().isEmpty());
 
-        Assertions.assertEquals(2, track.getNotes().size());
-        Assertions.assertEquals(note2, track.getNotes().get(0));
-        Assertions.assertEquals(note, track.getNotes().get(6));
+        try {
+            assertFalse(track.addNote(0, note));
+            assertTrue(track.addNote(0, note2));
+        } catch (NoteIntersectionException exception) {
+            fail("Note intersection exception thrown erroneously");
+        }
+
+        assertEquals(1, track.getNotes().size());
+        assertEquals(note2, track.getNotes().get(0));
+
+        try {
+            assertFalse(track.addNote(3, note));
+        } catch (NoteIntersectionException exception) {
+            fail("Note intersection exception thrown erroneously");
+        }
+
+        assertEquals(2, track.getNotes().size());
+        assertEquals(note2, track.getNotes().get(0));
+        assertEquals(note, track.getNotes().get(3));
+    }
+
+    @Test
+    public void testAddNoteOverlap() {
+        try {
+            assertFalse(track.addNote(0, note));
+        } catch (NoteIntersectionException exception) {
+            fail("Note intersection exception thrown erroneously");
+        }
+
+        try {
+            track.addNote(2, note2);
+            fail("Note intersection exception not thrown");
+        } catch (NoteIntersectionException exception) {
+            // expected
+        }
     }
 
     @Test
     public void testRemoveNote() {
-        Assertions.assertTrue(track.getNotes().isEmpty());
-        Assertions.assertFalse(track.addNote(0, note));
-        track.addNote(0, note2);
-        track.addNote(6, note);
-
-        Assertions.assertTrue(track.removeNote(0));
-
-        Assertions.assertEquals(1, track.getNotes().size());
-        Assertions.assertEquals(note, track.getNotes().get(6));
-
-        Assertions.assertFalse(track.removeNote(0));
-
-        Assertions.assertEquals(1, track.getNotes().size());
-        Assertions.assertEquals(note, track.getNotes().get(6));
-    }
-
-    @Test
-    public void testsynthesizeClip() {
-        byte[] expected = {0,0,0,0,-19,10,-19,10,-57,21,-57,21,
-                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-19,10,-19,10,-57,21,-57,21};
-        byte[] wave = new byte[0];
-
-        track.addNote(6, note);
-        track.addNote(0, note2);
+        assertTrue(track.getNotes().isEmpty());
 
         try {
-            wave = track.synthesizeClip(format);
-        } catch (IOException exception) {
-            fail();
+            assertFalse(track.addNote(0, note));
+            track.addNote(0, note2);
+            track.addNote(6, note);
+        } catch (NoteIntersectionException exception) {
+            fail("Note intersection exception thrown erroneously");
         }
+
+        assertTrue(track.removeNote(0));
+
+        assertEquals(1, track.getNotes().size());
+        assertEquals(note, track.getNotes().get(6));
+
+        assertFalse(track.removeNote(0));
+
+        assertEquals(1, track.getNotes().size());
+        assertEquals(note, track.getNotes().get(6));
+    }
+
+    @Test
+    public void testSynthesizeClip() {
+        byte[] expected = {0,0,0,0,-19,10,-19,10,-57,21,-57,21,
+                0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,-19,10,-19,10,-57,21,-57,21};
+
+        try {
+            track.addNote(3, note);
+            track.addNote(0, note2);
+        } catch (NoteIntersectionException exception) {
+            fail("Note intersection exception thrown erroneously");
+        }
+
+        byte[] wave = track.synthesizeClip(format);
 
         for (int i = 0; i < wave.length; i++){
-            Assertions.assertEquals(expected[i], wave[i]);
-        }
-
-    }
-
-    @Test
-    public void testEncodeBytesEmpty() {
-        ArrayList<Double> emptyWave = new double[10];
-        Arrays.fill(emptyWave, 0);
-
-        byte[] encodedSample = Track.encodeBytes(emptyWave, format);
-
-        for (int i = 0; i < 20; i++){
-            Assertions.assertEquals(0, encodedSample[i]);
-        }
-
-    }
-
-    @Test
-    public void testEncodeBytesSample() {
-        ArrayList<Double> sampleWave = {0,0,1000,1000,0,0,-1000,-1000,0,0};
-
-        byte[] expected = {0,0,0,0,-24,3,-24,3,0,0,0,0,24,-4,24,-4,0,0,0,0};
-        byte[] encodedSample = Track.encodeBytes(sampleWave, format);
-
-        for (int i = 0; i < 20; i++){
-            Assertions.assertEquals(expected[i], encodedSample[i]);
+            assertEquals(expected[i], wave[i]);
         }
 
     }

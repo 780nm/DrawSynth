@@ -1,0 +1,81 @@
+{
+    "notes": [
+        {
+            "duration": 20000,
+            "ampMod": "9f5b6062-664f-4487-a146-26723f8c4939",
+            "pitchMod": "27831d45-d67e-4e81-978f-46fc45ab732a",
+            "uuid": "eebd8764-5eff-46d9-8635-77c7b4db536e",
+            "bPitch": 200,
+            "bAmp": 0.5
+        },
+        {
+            "duration": 20000,
+            "ampMod": "8b1093d4-fa02-4e49-9dbc-42453ec7c5db",
+            "pitchMod": "825c643c-582f-43e3-a7c6-4a68776f3a0f",
+            "uuid": "ff199d0d-4833-47f9-aed9-ff9c324c4ba5",
+            "bPitch": 500,
+            "bAmp": 0.5
+        },
+        {
+            "duration": 30000,
+            "ampMod": "00b78b37-e508-4500-bbbd-51aaa7343d56",
+            "pitchMod": "27831d45-d67e-4e81-978f-46fc45ab732a",
+            "uuid": "1d08e5c2-e161-472c-be05-fa63a8d9bbad",
+            "bPitch": 600,
+            "bAmp": 0.3
+        }
+    ],
+    "instruments": [{
+        "uuid": "923055bd-c8e4-4f40-bb1c-889e435a470f",
+        "class": "synthesis.SinusoidInstrument"
+    }],
+    "uuid": "89c16b13-c8b3-4840-9d0f-e6beab09c5ed",
+    "pitchMods": [
+        {
+            "uuid": "27831d45-d67e-4e81-978f-46fc45ab732a",
+            "class": "synthesis.ConstantPitch"
+        },
+        {
+            "uuid": "825c643c-582f-43e3-a7c6-4a68776f3a0f",
+            "class": "synthesis.ConstantPitch"
+        }
+    ],
+    "ampMods": [
+        {
+            "balance": 0.3,
+            "attack": 0.1,
+            "decay": 0.5,
+            "uuid": "9f5b6062-664f-4487-a146-26723f8c4939",
+            "class": "synthesis.EnvelopeAmplitude"
+        },
+        {
+            "balance": 0,
+            "attack": 0.2,
+            "decay": 0.2,
+            "uuid": "00b78b37-e508-4500-bbbd-51aaa7343d56",
+            "class": "synthesis.EnvelopeAmplitude"
+        },
+        {
+            "balance": -0.3,
+            "attack": 0.1,
+            "decay": 0.5,
+            "uuid": "8b1093d4-fa02-4e49-9dbc-42453ec7c5db",
+            "class": "synthesis.EnvelopeAmplitude"
+        }
+    ],
+    "tracks": [
+        {
+            "notes": {
+                "0": "eebd8764-5eff-46d9-8635-77c7b4db536e",
+                "30000": "1d08e5c2-e161-472c-be05-fa63a8d9bbad"
+            },
+            "instrument": "923055bd-c8e4-4f40-bb1c-889e435a470f",
+            "uuid": "b9801e13-3527-4b41-abc3-5cc999616010"
+        },
+        {
+            "notes": {"0": "ff199d0d-4833-47f9-aed9-ff9c324c4ba5"},
+            "instrument": "923055bd-c8e4-4f40-bb1c-889e435a470f",
+            "uuid": "e0693b83-9bcf-4e36-97f6-1d88a4ee05cc"
+        }
+    ]
+}

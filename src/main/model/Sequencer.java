@@ -88,8 +88,7 @@ public class Sequencer implements Playable, Persistent {
     // MODIFIES: this
     // EFFECTS: Creates a new Note and adds to the sequencer and returns its index.
     //          Throws ElementNotFoundException if provided amp and pitch mod UUIDs are not present in the sequencer.
-    public int addNote(double baseAmp, UUID ampModID, double basePitch, UUID pitchModID, int duration)
-            throws ElementNotFoundException {
+    public int addNote(double baseAmp, UUID ampModID, double basePitch, UUID pitchModID, int duration) {
 
         return addNote(UUID.randomUUID(), baseAmp, ampModID, basePitch, pitchModID, duration);
     }
@@ -97,9 +96,7 @@ public class Sequencer implements Playable, Persistent {
     // MODIFIES: this
     // EFFECTS: Creates a new Note with the given UUID and adds to the sequencer and returns its index.
     //          Throws ElementNotFoundException if provided amp and pitch mod UUIDs are not present in the sequencer.
-    public int addNote(UUID id, double baseAmp, UUID ampModID, double basePitch, UUID pitchModID, int duration)
-            throws ElementNotFoundException {
-
+    public int addNote(UUID id, double baseAmp, UUID ampModID, double basePitch, UUID pitchModID, int duration) {
         Note note = new Note(baseAmp, getElementWithID(ampMods, ampModID),
                 basePitch, getElementWithID(pitchMods, pitchModID), duration, id);
         notes.add(note);
@@ -109,14 +106,14 @@ public class Sequencer implements Playable, Persistent {
     // MODIFIES: this
     // EFFECTS: Creates a new Track and adds to the sequencer and returns its index.
     //          Throws ElementNotFoundException if provided instrument UUID is not present in the sequencer.
-    public int addTrack(UUID instrumentID) throws ElementNotFoundException {
+    public int addTrack(UUID instrumentID) {
         return addTrack(UUID.randomUUID(), instrumentID);
     }
 
     // MODIFIES: this
     // EFFECTS: Creates a new Track with the given UUID and adds to the sequencer and returns its index.
     //          Throws ElementNotFoundException if provided instrument UUID is not present in the sequencer.
-    public int addTrack(UUID trackID, UUID instrumentID) throws ElementNotFoundException {
+    public int addTrack(UUID trackID, UUID instrumentID) {
         Track track = new Track(getElementWithID(instruments, instrumentID), trackID);
         tracks.add(track);
         return tracks.size() - 1;
@@ -125,8 +122,7 @@ public class Sequencer implements Playable, Persistent {
     // MODIFIES: this
     // EFFECTS: Inserts a note with the given UUID into the track with the given UUID at the given time.
     //          Throws ElementNotFoundException if provided note.track UUIDs are not present in the sequencer.
-    public boolean insertNote(int time, UUID noteID, UUID trackID)
-            throws ElementNotFoundException, NoteIntersectionException {
+    public boolean insertNote(int time, UUID noteID, UUID trackID) {
         Track track = getElementWithID(tracks, trackID);
         Note note = getElementWithID(notes, noteID);
 

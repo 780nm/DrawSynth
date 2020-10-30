@@ -28,7 +28,7 @@ public class JsonReader {
 
     // EFFECTS: Constructs a new JsonReader and generates state from the given file.
     //          Throws IOException on file access error, GeneratorException if config. is malformed.
-    public JsonReader(String fileName) throws IOException, GeneratorException {
+    public JsonReader(String fileName) throws IOException {
         this.fileName = fileName;
         refresh();
     }
@@ -39,7 +39,7 @@ public class JsonReader {
 
     // EFFECTS: Re-generates state from the given file.
     //          Throws IOException on file access error, GeneratorException if config. is malformed.
-    public void refresh() throws IOException, GeneratorException {
+    public void refresh() throws IOException {
         String jsonData = readFile(fileName);
         json = new JSONObject(jsonData);
         generate();
@@ -61,7 +61,7 @@ public class JsonReader {
     // MODIFIES: this
     // EFFECTS: Generates a Sequencer from the loaded configuration.
     //          Throws GeneratorException if config. is malformed.
-    private void generate() throws GeneratorException {
+    private void generate() {
         try {
             UUID id = UUID.fromString(json.getString("uuid"));
             sequencer = new Sequencer(id);
@@ -71,16 +71,15 @@ public class JsonReader {
             generateInstruments();
             generateNotes();
             generateTracks();
-
-        } catch (JSONException exception) {
-            throw new GeneratorException("JSON Exception");
+        } catch (Exception e) {
+            throw new GeneratorException(e.getMessage());
         }
     }
 
     // MODIFIES: this
     // EFFECTS: Generates a list of AmplitudeModulators from the loaded configuration
     //          and writes it to the current sequencer. Throws GeneratorException if config. is malformed.
-    private void generateAmpMods() throws GeneratorException {
+    private void generateAmpMods() {
         JSONArray modsJson = json.getJSONArray("ampMods");
         forEachEntry(modsJson, this::generateAmpMod);
     }
@@ -88,7 +87,7 @@ public class JsonReader {
     // MODIFIES: this
     // EFFECTS: Generates an appropriate AmplitudeModulator from the given configuration
     //          and writes it to the current sequencer. Throws GeneratorException if config. is malformed.
-    private void generateAmpMod(JSONObject modJson) throws GeneratorException {
+    private void generateAmpMod(JSONObject modJson) {
         String ampModClass = modJson.getString("class");
         AmplitudeModulator ampMod;
 
@@ -99,7 +98,7 @@ public class JsonReader {
                 double attack = modJson.getDouble("attack");
                 double decay = modJson.getDouble("decay");
                 double balance = modJson.getDouble("balance");
-                ampMod = new EnvelopeAmplitude(attack, balance, decay, id);
+                ampMod = new EnvelopeAmplitude(attack, decay, balance, id);
                 break;
             default:
                 throw new GeneratorException("ampMod Gen");
@@ -111,7 +110,7 @@ public class JsonReader {
     // MODIFIES: this
     // EFFECTS: Generates a list of PitchModulators from the loaded configuration
     //          and writes it to the current sequencer. Throws GeneratorException if config. is malformed.
-    private void  generatePitchMods() throws GeneratorException {
+    private void  generatePitchMods() {
         JSONArray modsJson = json.getJSONArray("pitchMods");
         forEachEntry(modsJson, this::generatePitchMod);
     }
@@ -119,7 +118,7 @@ public class JsonReader {
     // MODIFIES: this
     // EFFECTS: Generates an appropriate PitchModulator from the given configuration
     //          and writes it to the current sequencer. Throws GeneratorException if config. is malformed.
-    private void generatePitchMod(JSONObject modJson) throws GeneratorException {
+    private void generatePitchMod(JSONObject modJson) {
         String pitchModClass = modJson.getString("class");
         PitchModulator pitchMod;
 
@@ -138,7 +137,7 @@ public class JsonReader {
     // MODIFIES: this
     // EFFECTS: Generates a list of Instruments from the loaded configuration and writes it to the current sequencer.
     //          Throws GeneratorException if config. is malformed.
-    private void generateInstruments() throws GeneratorException {
+    private void generateInstruments() {
         JSONArray instrumentsJson = json.getJSONArray("instruments");
         forEachEntry(instrumentsJson, this::generateInstrument);
     }
@@ -146,7 +145,7 @@ public class JsonReader {
     // MODIFIES: this
     // EFFECTS: Generates an appropriate Instrument from the given configuration and writes it to the current sequencer.
     //          Throws GeneratorException if config. is malformed.
-    private void generateInstrument(JSONObject instrJson) throws GeneratorException {
+    private void generateInstrument(JSONObject instrJson) {
         String instrumentClass = instrJson.getString("class");
         Instrument instr;
 
@@ -164,17 +163,16 @@ public class JsonReader {
 
     // MODIFIES: this
     // EFFECTS: Generates a list of Notes from the loaded configuration and writes it to the current sequencer.
-    //          Throws GeneratorException if config. is malformed.
-    private void generateNotes() throws GeneratorException {
+    //          Throws ElementNotFoundException if config. is malformed.
+    private void generateNotes() {
         JSONArray notesJson = json.getJSONArray("notes");
         forEachEntry(notesJson, this::generateNote);
     }
 
     // MODIFIES: this
     // EFFECTS: Generates a Note from the given configuration and writes it to the current sequencer.
-    //          Throws GeneratorException if config. is malformed
-    private void generateNote(JSONObject noteJson) throws GeneratorException {
-
+    //          Throws ElementNotFoundException if config. is malformed
+    private void generateNote(JSONObject noteJson) {
         UUID noteID = UUID.fromString(noteJson.getString("uuid"));
 
         double baseAmplitude = noteJson.getDouble("bAmp");
@@ -183,56 +181,39 @@ public class JsonReader {
         UUID pitchModID = UUID.fromString(noteJson.getString("pitchMod"));
         int duration = noteJson.getInt("duration");
 
-        try {
-            sequencer.addNote(noteID, baseAmplitude, ampModID, basePitch, pitchModID, duration);
-        } catch (ElementNotFoundException e) {
-            throw new GeneratorException("Note gen failure: couldn't find required amp/pitch mods");
-        }
+        sequencer.addNote(noteID, baseAmplitude, ampModID, basePitch, pitchModID, duration);
 
     }
 
     // MODIFIES: this
     // EFFECTS: Generates a list of Tracks from the loaded configuration and writes it to the current sequencer.
-    //          Throws GeneratorException if config. is malformed.
-    private void generateTracks() throws GeneratorException {
-
+    //          Throws ElementNotFoundException if config. is malformed.
+    private void generateTracks() {
         JSONArray tracksJson = json.getJSONArray("tracks");
         forEachEntry(tracksJson, this::generateTrack);
     }
 
     // MODIFIES: this
     // EFFECTS: Generates a Track from the given configuration and writes it to the current sequencer.
-    //          Throws GeneratorException if config. is malformed.
-    private void generateTrack(JSONObject trackJson) throws GeneratorException {
-
+    //          Throws ElementNotFoundException if config. is malformed.
+    private void generateTrack(JSONObject trackJson) {
         UUID trackID = UUID.fromString(trackJson.getString("uuid"));
         UUID instrumentID = UUID.fromString(trackJson.getString("instrument"));
 
-        try {
-            sequencer.addTrack(trackID, instrumentID);
-            populateTrackNotes(trackJson, trackID);
-        } catch (ElementNotFoundException e) {
-            throw new GeneratorException("Track gen: couldn't find required elements");
-        }
+        sequencer.addTrack(trackID, instrumentID);
+        populateTrackNotes(trackJson, trackID);
     }
 
     // MODIFIES: this
     // EFFECTS: Retrieves Notes with the UUID corresponding to those stored in the Track.
     //          configuration and populates the track.
-    //          Throws ElementNotFound if note is not present in Notes.
-    private void populateTrackNotes(JSONObject trackJson, UUID trackID)
-            throws ElementNotFoundException, GeneratorException {
+    //          Throws ElementNotFoundException, NoteIntersectionException if config. is malformed.
+    private void populateTrackNotes(JSONObject trackJson, UUID trackID) {
         JSONObject notesJson = trackJson.getJSONObject("notes");
 
         for (String time : notesJson.keySet()) {
             UUID noteID = UUID.fromString(notesJson.getString(time));
-            try {
-                sequencer.insertNote(Integer.parseInt(time), noteID, trackID);
-            } catch (NoteIntersectionException exception) {
-                throw new GeneratorException("Track Note Insertion: note conflict");
-            } catch (NumberFormatException exception) {
-                throw new GeneratorException("Track Note Insertion: unable to parse timestamp: " + exception);
-            }
+            sequencer.insertNote(Integer.parseInt(time), noteID, trackID);
         }
     }
 

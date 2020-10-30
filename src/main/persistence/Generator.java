@@ -5,6 +5,6 @@ import org.json.JSONObject;
 
 public interface Generator {
 
-    void generate(JSONObject json) throws GeneratorException;
+    void generate(JSONObject json);
 
 }

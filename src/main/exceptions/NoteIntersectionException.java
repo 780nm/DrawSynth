@@ -1,4 +1,5 @@
 package exceptions;
 
-public class NoteIntersectionException extends Exception {
+// Exceptions regarding Note collisions within a given Track
+public class NoteIntersectionException extends RuntimeException {
 }
