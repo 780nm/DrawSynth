@@ -27,12 +27,13 @@ and practicing building up an application using object-oriented design principle
 - As a user, I would like to assemble modulation profiles into Notes 
 - As a user, I would like to add notes to a track associated with a specified instrument
 - As a user, I would like to play back a Track
+- As a user, I would like to add tracks to a sequence
+- As a user, I would like to save and read sequences and their associated elements to and from disk
+- As a user, I would like to play back a sequence
 
 *Upcoming user stories (note stub classes and tests demonstrating proposed hierarchical structure are present):*
 
-- As a user, I would like to add tracks to a sequence
-- As a user, I would like to save and read sequences and their associated elements to and from disk
 - As a user, I would like to export the encoded audio of a sequence to disk
-- As a user, I would like to play back sequence
 - As a user, I would like to edit existing sequences and their associated elements
 - As a user, I would like to draw instrument and modulator curves
+- As a user, i would like to define an instument as a composition of other instruments
