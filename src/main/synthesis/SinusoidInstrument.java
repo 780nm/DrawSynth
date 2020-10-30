@@ -39,8 +39,6 @@ public class SinusoidInstrument implements Instrument {
             }
         }
 
-        assert (wave.size() == duration * format.getChannels());
-
         return wave;
     }
 
