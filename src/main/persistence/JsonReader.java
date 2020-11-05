@@ -101,7 +101,7 @@ public class JsonReader {
                 ampMod = new EnvelopeAmplitude(attack, decay, balance, id);
                 break;
             default:
-                throw new GeneratorException("ampMod Gen");
+                throw new GeneratorException("ampMod Class not found");
         }
 
         sequencer.addAmpMod(ampMod);
@@ -128,7 +128,7 @@ public class JsonReader {
                 pitchMod = new ConstantPitch(id);
                 break;
             default:
-                throw new GeneratorException("pitchMod Gen");
+                throw new GeneratorException("pitchMod Class not found");
         }
 
         sequencer.addPitchMod(pitchMod);
