@@ -11,6 +11,17 @@ import persistence.JsonWriter;
 import synthesis.*;
 
 import javax.sound.sampled.AudioFormat;
+import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
+import javax.swing.filechooser.FileNameExtensionFilter;
+import java.awt.*;
+import java.awt.event.ActionEvent;
+import java.awt.event.ActionListener;
+import java.awt.event.WindowAdapter;
+import java.awt.event.WindowEvent;
+import java.beans.PropertyChangeEvent;
+import java.beans.PropertyChangeListener;
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,11 +30,9 @@ import java.util.UUID;
 import static javax.sound.sampled.AudioFormat.Encoding.PCM_SIGNED;
 
 // Represents the current applications state and user interaction
-public class SequencerApp {
+public class SequencerApp extends JFrame {
 
-    private static final AudioFormat FORMAT = new AudioFormat(PCM_SIGNED, 44100, 16, 2, 4, 44100, false);
-    private static final String FILENAME_REGEX = "^[a-zA-z0-9]*[.]json$";
-    private static final String FILE_ROOT = "./data/";
+    public static final AudioFormat FORMAT = new AudioFormat(PCM_SIGNED, 44100, 16, 2, 4, 44100, false);
 
     private InputHandler input;
     private Player player;
@@ -31,6 +40,7 @@ public class SequencerApp {
 
     // EFFECTS: Initializes the application
     public SequencerApp() throws ElementNotFoundException {
+        super("Sequencer");
 
         Instrument instrument = new SinusoidInstrument();
         seq = new Sequencer();
@@ -40,79 +50,77 @@ public class SequencerApp {
         player = new Player(FORMAT);
         player.setTarget(seq);
 
-        input = new InputHandler();
+        //Create and set up the window.
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        initializeContent();
+
     }
 
-    // EFFECTS: Polls the user for command input
-    public void start() {
-        System.out.println("Welcome!");
-
-        while (true) {
-            String command = input.getSafeString(new String[] {"add", "insert", "play", "save", "load", "exit"},
-                    "Enter a command: ", "Invalid command");
-            switch (command.toLowerCase()) {
-                case "add":
-                    processAdd();
-                    break;
-                case "insert":
-                    processInsert();
-                    break;
-                case "play":
-                    System.out.println("Playing...");
-                    player.start();
-                    break;
-                case "exit":
-                    System.out.println("Exiting...");
-                    return;
-                default:
-                    processSaveLoad(command);
-                    break;
-            }
-        }
+    public void reinitializeContent() {
+        initializeContent();
+        repaint();
+        System.gc();
     }
 
-    // EFFECTS: Polls the user for what they would like to add, and calls the appropriate method
-    private void processAdd() {
-        String command = input.getSafeString(new String[] {"a-mod", "p-mod", "note", "track", "exit"},
-                "What would you like to add? ", "Invalid selection");
-        switch (command.toLowerCase()) {
-            case "a-mod":
-                processAddAmpProfile();
-                break;
-            case "p-mod":
-                processAddPitchProfile();
-                break;
-            case "note":
-                processAddNote();
-                break;
-            case "track":
-                processAddTrack();
-                break;
-            case "exit":
-                System.out.println("Returning...");
-                return;
-            default:
-                break;
-        }
+    private void initializeContent() {
+        //Create and set up the content pane.
+
+        JMenuBar bar = new MenuBar(this);
+        setJMenuBar(bar);
+
+        JTabbedPane content = new JTabbedPane();
+        content.setOpaque(true);
+
+        content.addTab("Palette", new Palette(this));
+
+        setSize(1000,800);
+        setContentPane(content);
+        setVisible(true);
     }
 
-    // MODIFIES: this
-    // EFFECTS: Add a new Enveloped Amplitude Profile to the amp. profile bank
-    private void processAddAmpProfile() {
-        System.out.println("Creating new Enveloped Amplitude Profile...");
-
-        DoubleEvaluator evalAttack = input -> 0 <= input && input <= 1;
-        double attack = input.getSafeDouble(evalAttack, "Attack: ", "Invalid input");
-
-        DoubleEvaluator evalDecay = input -> 0 <= input && input <= 1 && input + attack <= 1;
-        double decay = input.getSafeDouble(evalDecay, "Decay: ", "Invalid input");
-
-        DoubleEvaluator evalBal = input -> -1 <= input && input <= 1;
-        double bal = input.getSafeDouble(evalBal, "Balance: ", "Invalid input");
-
-        int index = seq.addAmpMod(new EnvelopeAmplitude(attack, decay, bal));
-        System.out.println("Profile added at index " + index);
+    public void play() {
+        player.start();
     }
+
+
+
+
+    public Sequencer getSeq() {
+        return seq;
+    }
+
+    public void setSeq(Sequencer seq) {
+        this.seq = seq;
+        player.setTarget(seq);
+        reinitializeContent();
+    }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
     // MODIFIES: this
     // EFFECTS: Add a new Constant Pitch Profile to the pitch bank
@@ -215,38 +223,4 @@ public class SequencerApp {
         System.out.println("Note added at: " + position);
     }
 
-
-    // This had to be factored out to get past the maximum method length, otherwise this switch would be in start().
-    private void processSaveLoad(String command) {
-        switch (command) {
-            case "save":
-                processSave();
-                return;
-            case "load":
-                processLoad();
-        }
-    }
-
-    private void processSave() {
-        String filename = input.getSafeString(FILENAME_REGEX, "Please input file name: ", "Invalid name");
-        try {
-            JsonWriter writer = new JsonWriter(FILE_ROOT + filename);
-            writer.write(seq);
-        } catch (FileNotFoundException exception) {
-            System.out.println("Unable to create output file.");
-        }
-    }
-
-    private void processLoad() {
-        String filename = input.getSafeString(FILENAME_REGEX, "Please input file name: ", "Invalid name");
-        try {
-            JsonReader reader = new JsonReader(FILE_ROOT + filename);
-            seq = reader.getSequencer();
-            player.setTarget(seq);
-        } catch (IOException exception) {
-            System.out.println("Unable to load file.");
-        } catch (GeneratorException exception) {
-            System.out.println("Unable to generate Sequencer, malformed config. Cause: " + exception);
-        }
-    }
 }
