@@ -21,21 +21,18 @@ public class KeyedInstrument extends KeyedElement implements Instrument {
         while (output.size() / channels < duration) {
             double sample = lerpAt(position % frameCount);
             for (int i = 0; i < channels; i++) {
-                output.add(sample);
+                output.add(sample * scale);
             }
             double period = pitchMod.getPeriodAtTime(basePitch,
                     output.size() / (double)(channels * duration), sampleRate);
-            position += (frameCount / period) * scale;
+            position += (frameCount / period);
         }
         return output;
     }
 
-    // EFFECTS: Returns the state of the Object as a serialized JSONObject
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-        // TODO: Implement this
-        return json;
+    @Override
+    public String toString() {
+        return "Keyframed Instrument: Frames - " + frames.size();
     }
-
 
 }

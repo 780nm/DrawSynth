@@ -1,12 +1,13 @@
-package ui;
+package ui.components;
 
 import exceptions.GeneratorException;
 import org.json.JSONException;
 import persistence.JsonReader;
 import persistence.JsonWriter;
+import ui.SequencerApp;
+import ui.actions.FileAction;
 
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 import java.awt.event.ActionEvent;
@@ -20,7 +21,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
 
     SequencerApp app;
 
-    MenuBar(SequencerApp app) {
+    public MenuBar(SequencerApp app) {
         super();
         this.app = app;
 

@@ -8,7 +8,7 @@ import java.awt.*;
 public class Main {
 
     public static void main(String[] args) {
-        // Schedules the application to be run at the correct time in the event queue.
+        // Schedules the application to be run
         SwingUtilities.invokeLater(SequencerApp::new);
     }
 

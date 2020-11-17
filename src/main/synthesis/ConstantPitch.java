@@ -31,6 +31,11 @@ public class ConstantPitch implements PitchModulator {
         return json;
     }
 
+    @Override
+    public String toString() {
+        return "Constant Pitch Modulator";
+    }
+
     public UUID getUuid() {
         return pitchModId;
     }

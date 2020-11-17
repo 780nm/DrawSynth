@@ -86,6 +86,13 @@ public class EnvelopeAmplitude implements AmplitudeModulator {
         return json;
     }
 
+    @Override
+    public String toString() {
+        return "Envelope Amp: Attack - " + String.format("%.4g", attack)
+                + ", Decay - " + String.format("%.4g", decay)
+                + ", Balance - " + String.format("%.4g", balance);
+    }
+
     // Getters and Setters
 
     public UUID getUuid() {

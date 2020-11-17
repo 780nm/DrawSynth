@@ -1,6 +1,4 @@
-package ui;
-
-import java.io.File;
+package ui.actions;
 
 public interface FileAction {
 

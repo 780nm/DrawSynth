@@ -13,11 +13,8 @@ public class KeyedPitch extends KeyedElement implements PitchModulator {
         return sampleRate / basePitch * lerpAt(time * getFrameCount());
     }
 
-    // EFFECTS: Returns the state of the Object as a serialized JSONObject
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-        // TODO: Implement this
-        return json;
+    public String toString() {
+        return "Keyframed Pitch Modulator: Frames - " + frames.size();
     }
 
 }

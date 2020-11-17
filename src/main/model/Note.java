@@ -5,6 +5,7 @@ import persistence.Persistent;
 import synthesis.AmplitudeModulator;
 import synthesis.Instrument;
 import synthesis.PitchModulator;
+import ui.SequencerApp;
 
 import javax.sound.sampled.AudioFormat;
 import java.util.ArrayList;
@@ -69,6 +70,14 @@ public class Note implements Persistent {
         json.put("bPitch", basePitch);
         json.put("duration", duration);
         return json;
+    }
+
+    @Override
+    public String toString() {
+        return "Base Pitch: " +  String.format("%.6g", basePitch) + "hz "
+                + ", Base Amp: " + String.format("%.4g", baseAmplitude * 100) + "% "
+                + ", Duration: "
+                + String.format("%.4g", duration / (double) SequencerApp.FORMAT.getFrameRate()) + "s";
     }
 
     // Getters and Setters

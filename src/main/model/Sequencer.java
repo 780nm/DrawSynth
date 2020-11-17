@@ -13,7 +13,6 @@ import javax.sound.sampled.AudioFormat;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static persistence.PersistenceUtil.arrayToJson;
 import static persistence.PersistenceUtil.getElementWithID;
 
 public class Sequencer implements Playable, Persistent {
@@ -133,11 +132,11 @@ public class Sequencer implements Playable, Persistent {
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("uuid", sequencerID.toString());
-        json.put("ampMods", arrayToJson(ampMods));
-        json.put("pitchMods", arrayToJson(pitchMods));
-        json.put("notes", arrayToJson(notes));
-        json.put("instruments", arrayToJson(instruments));
-        json.put("tracks", arrayToJson(tracks));
+        json.put("ampMods", ampMods);
+        json.put("pitchMods", pitchMods);
+        json.put("notes", notes);
+        json.put("instruments", instruments);
+        json.put("tracks", tracks);
         return json;
     }
 

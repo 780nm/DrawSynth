@@ -1,14 +1,16 @@
 package synthesis;
 
+import model.Note;
+import org.json.JSONObject;
 import persistence.Persistent;
 
-import java.util.ArrayList;
-import java.util.ListIterator;
-import java.util.Map;
-import java.util.UUID;
+import java.util.*;
+
+import static persistence.PersistenceUtil.mapToJson;
 
 public abstract class KeyedElement implements Persistent {
-    ArrayList<Double> frames;
+
+    protected ArrayList<Double> frames;
     private UUID keyedId;
 
     public KeyedElement() {
@@ -34,7 +36,7 @@ public abstract class KeyedElement implements Persistent {
     }
 
     protected double lerpAt(double position) {
-        if (0 < position && position < frames.size()) {
+        if (0 < position && position < frames.size() - 1) {
             double prev = frames.get((int) Math.floor(position));
             double next = frames.get((int) Math.ceil(position));
 
@@ -44,6 +46,14 @@ public abstract class KeyedElement implements Persistent {
         } else {
             return frames.get(frames.size() - 1);
         }
+    }
+
+    public JSONObject toJson() {
+        JSONObject json = new JSONObject();
+        json.put("uuid", keyedId.toString());
+        json.put("frames", frames);
+        json.put("class", this.getClass().getName());
+        return json;
     }
 
     public UUID getUuid() {

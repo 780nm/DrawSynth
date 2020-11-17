@@ -21,10 +21,9 @@ public class KeyedAmplitude extends KeyedElement implements AmplitudeModulator {
         }
     }
 
-    public JSONObject toJson() {
-        JSONObject json = new JSONObject();
-        // TODO: Implement this
-        return json;
+    @Override
+    public String toString() {
+        return "Keyframed Amplitude Modulator: Frames - " + frames.size();
     }
 
 }

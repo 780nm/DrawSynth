@@ -50,8 +50,12 @@ public class SinusoidInstrument implements Instrument {
         return json;
     }
 
-    // Getters
+    @Override
+    public String toString() {
+        return "Sinusoid Instrument";
+    }
 
+    // Getters
     public UUID getUuid() {
         return instrumentID;
     }
