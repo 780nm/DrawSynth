@@ -6,18 +6,14 @@ import persistence.JsonReader;
 import persistence.JsonWriter;
 import ui.SequencerApp;
 import ui.actions.FileAction;
+import ui.components.dialogues.FilePickerDialogue;
 
 import javax.swing.*;
-import javax.swing.filechooser.FileNameExtensionFilter;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
 public class MenuBar extends JMenuBar implements ActionListener {
-
-    private static final String FILE_EXT = "json";
-    private static final String FILE_ROOT = "./data/";
 
     SequencerApp app;
 
@@ -78,7 +74,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
             }
         };
 
-        processFileAction(save);
+        new FilePickerDialogue(this, save);
     }
 
     private void processLoad() {
@@ -105,37 +101,7 @@ public class MenuBar extends JMenuBar implements ActionListener {
             }
         };
 
-        processFileAction(load);
-    }
-
-    private void processFileAction(FileAction action) {
-        JFileChooser fileChooser = new JFileChooser(FILE_ROOT);
-        fileChooser.setDialogTitle(action.getActionTitle());
-        fileChooser.setApproveButtonToolTipText(action.getActionName());
-
-        fileChooser.setMultiSelectionEnabled(false);
-        fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
-
-        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Sequencer Files", FILE_EXT));
-        fileChooser.setAcceptAllFileFilterUsed(false);
-
-        fileChooser.setMinimumSize(new Dimension(800, 600));
-
-        while (true) {
-            if (fileChooser.showDialog(this, action.getActionName()) == JFileChooser.APPROVE_OPTION) {
-                if (fileChooser.getSelectedFile().getName().toLowerCase().endsWith("." + FILE_EXT)) {
-                    if (action.process(fileChooser.getSelectedFile().getPath())) {
-                        return;
-                    } else {
-                        JOptionPane.showMessageDialog(fileChooser, "Unable to process file.");
-                    }
-                } else {
-                    JOptionPane.showMessageDialog(fileChooser, "Invalid Filename. Please try again");
-                }
-            } else {
-                return;
-            }
-        }
+        new FilePickerDialogue(this, load);
     }
 
 }

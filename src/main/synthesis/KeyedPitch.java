@@ -7,6 +7,14 @@ import java.util.UUID;
 
 public class KeyedPitch extends KeyedElement implements PitchModulator {
 
+    public KeyedPitch() {
+        super();
+    }
+
+    public KeyedPitch(UUID id) {
+        super(id);
+    }
+
     // REQUIRES: 0 <= time <= 1, sampleRate > 0
     // EFFECTS: Returns the period in samples of the waveform's oscillation as a function of the current sampleRate
     public double getPeriodAtTime(double basePitch, double time, float sampleRate) {

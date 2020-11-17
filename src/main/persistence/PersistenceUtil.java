@@ -13,6 +13,17 @@ import java.util.UUID;
 // JSON Serialization helpers
 public class PersistenceUtil {
 
+    // EFFECTS: Returns a JSONObject representing the data in the given ArrayList
+    public static JSONArray arrayToJson(ArrayList<? extends Persistent> objects) {
+        JSONArray jsonArray = new JSONArray();
+
+        for (Persistent object: objects) {
+            jsonArray.put(object.toJson());
+        }
+
+        return jsonArray;
+    }
+
     // EFFECTS: Returns a JSONObject representing the data in the given Map
     public static JSONObject mapToJson(Map<?, ?> map) {
         JSONObject jsonObject = new JSONObject();

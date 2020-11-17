@@ -1,11 +1,18 @@
 package synthesis;
 
-import org.json.JSONObject;
-
 import javax.sound.sampled.AudioFormat;
 import java.util.ArrayList;
+import java.util.UUID;
 
 public class KeyedInstrument extends KeyedElement implements Instrument {
+
+    public KeyedInstrument() {
+        super();
+    }
+
+    public KeyedInstrument(UUID id) {
+        super(id);
+    }
 
     public ArrayList<Double> synthesizeWaveform(double basePitch, PitchModulator pitchMod,
                                                                              int duration, AudioFormat format) {

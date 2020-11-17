@@ -1,12 +1,12 @@
 package synthesis;
 
-import model.Note;
+import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Persistent;
 
-import java.util.*;
 
-import static persistence.PersistenceUtil.mapToJson;
+import java.util.ArrayList;
+import java.util.UUID;
 
 public abstract class KeyedElement implements Persistent {
 
@@ -48,10 +48,16 @@ public abstract class KeyedElement implements Persistent {
         }
     }
 
+    @Override
     public JSONObject toJson() {
+        JSONArray frameArray = new JSONArray();
+        for (double frame : frames) {
+            frameArray.put(frame);
+        }
+
         JSONObject json = new JSONObject();
         json.put("uuid", keyedId.toString());
-        json.put("frames", frames);
+        json.put("frames", frameArray);
         json.put("class", this.getClass().getName());
         return json;
     }

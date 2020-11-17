@@ -88,17 +88,20 @@ public class JsonReader {
     // EFFECTS: Generates an appropriate AmplitudeModulator from the given configuration
     //          and writes it to the current sequencer. Throws GeneratorException if config. is malformed.
     private void generateAmpMod(JSONObject modJson) {
+        UUID id = UUID.fromString(modJson.getString("uuid"));
         String ampModClass = modJson.getString("class");
         AmplitudeModulator ampMod;
 
-        // All switch statements are present to allow for planned extension of project scope
         switch (ampModClass) {
             case "synthesis.EnvelopeAmplitude":
-                UUID id = UUID.fromString(modJson.getString("uuid"));
                 double attack = modJson.getDouble("attack");
                 double decay = modJson.getDouble("decay");
                 double balance = modJson.getDouble("balance");
                 ampMod = new EnvelopeAmplitude(attack, decay, balance, id);
+                break;
+            case "synthesis.KeyedAmplitude":
+                ampMod = new KeyedAmplitude(id);
+                populateKeyedElement(modJson, (KeyedAmplitude)ampMod);
                 break;
             default:
                 throw new GeneratorException("ampMod Class not found");
@@ -119,13 +122,17 @@ public class JsonReader {
     // EFFECTS: Generates an appropriate PitchModulator from the given configuration
     //          and writes it to the current sequencer. Throws GeneratorException if config. is malformed.
     private void generatePitchMod(JSONObject modJson) {
+        UUID id = UUID.fromString(modJson.getString("uuid"));
         String pitchModClass = modJson.getString("class");
         PitchModulator pitchMod;
 
         switch (pitchModClass) {
             case "synthesis.ConstantPitch":
-                UUID id = UUID.fromString(modJson.getString("uuid"));
                 pitchMod = new ConstantPitch(id);
+                break;
+            case "synthesis.KeyedPitch":
+                pitchMod = new KeyedPitch(id);
+                populateKeyedElement(modJson, (KeyedPitch)pitchMod);
                 break;
             default:
                 throw new GeneratorException("pitchMod Class not found");
@@ -146,13 +153,17 @@ public class JsonReader {
     // EFFECTS: Generates an appropriate Instrument from the given configuration and writes it to the current sequencer.
     //          Throws GeneratorException if config. is malformed.
     private void generateInstrument(JSONObject instrJson) {
+        UUID id = UUID.fromString(instrJson.getString("uuid"));
         String instrumentClass = instrJson.getString("class");
         Instrument instr;
 
         switch (instrumentClass) {
             case "synthesis.SinusoidInstrument":
-                UUID id = UUID.fromString(instrJson.getString("uuid"));
                 instr = new SinusoidInstrument(id);
+                break;
+            case "synthesis.KeyedInstrument":
+                instr = new KeyedInstrument(id);
+                populateKeyedElement(instrJson, (KeyedInstrument)instr);
                 break;
             default:
                 throw new GeneratorException("Instr. Gen");
@@ -215,6 +226,10 @@ public class JsonReader {
             UUID noteID = UUID.fromString(notesJson.getString(time));
             sequencer.insertNote(Integer.parseInt(time), noteID, trackID);
         }
+    }
+
+    private void populateKeyedElement(JSONObject json, KeyedElement element) {
+        json.getJSONArray("frames").forEach(frame -> element.addFrame(Double.valueOf(frame.toString())));
     }
 
 }
