@@ -72,6 +72,7 @@ public class Note implements Persistent {
         return json;
     }
 
+    // EFFECTS: Returns the state of the Note as a formatted String
     @Override
     public String toString() {
         return "Base Pitch: " +  String.format("%.6g", basePitch) + "hz "

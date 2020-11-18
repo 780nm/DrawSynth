@@ -12,6 +12,8 @@ import ui.components.Timeline;
 
 import javax.sound.sampled.AudioFormat;
 import javax.swing.*;
+import javax.swing.event.ChangeEvent;
+import javax.swing.event.ChangeListener;
 import java.util.ArrayList;
 import java.util.UUID;
 
@@ -24,6 +26,7 @@ public class SequencerApp extends JFrame {
 
     private final Player player;
     private Sequencer seq;
+    private int tabIndex;
 
     // EFFECTS: Initializes the application
     public SequencerApp() throws ElementNotFoundException {
@@ -38,6 +41,7 @@ public class SequencerApp extends JFrame {
         player.setTarget(seq);
 
         //Create and set up the window.
+        tabIndex = 0;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         initializeContent();
 
@@ -49,9 +53,8 @@ public class SequencerApp extends JFrame {
         System.gc();
     }
 
+    // With help from https://stackoverflow.com/questions/6799731/jtabbedpane-changelistener
     private void initializeContent() {
-        //Create and set up the content pane.
-
         JMenuBar bar = new MenuBar(this);
         setJMenuBar(bar);
 
@@ -60,6 +63,9 @@ public class SequencerApp extends JFrame {
 
         content.addTab("Palette", new Palette(this));
         content.addTab("Timeline", new Timeline(this));
+        content.setSelectedIndex(tabIndex);
+
+        content.addChangeListener(e -> tabIndex = content.getSelectedIndex());
 
         setSize(1000,800);
         setContentPane(content);

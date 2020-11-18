@@ -40,7 +40,8 @@ public class Palette extends Panel {
             AmplitudeModulator mod = ampMods.get(i);
             String uuid = mod.getUuid().toString();
             String className = mod.getClass().getName();
-            addRow(ampModsPanel, "   "  + i, "edit:ampMod:" + className + ":" + uuid, "Edit", mod.toString());
+            addRow(ampModsPanel, String.valueOf(i + 1),
+                    "edit:ampMod:" + className + ":" + uuid, "Edit", mod.toString());
         }
         add(ampModsPanel);
     }
@@ -53,7 +54,8 @@ public class Palette extends Panel {
             PitchModulator mod = pitchMods.get(i);
             String uuid = mod.getUuid().toString();
             String className = mod.getClass().getName();
-            addRow(pitchModsPanel, "   " + i, "edit:pitchMod:" + className + ":" + uuid, "Edit", mod.toString());
+            addRow(pitchModsPanel, String.valueOf(i + 1),
+                    "edit:pitchMod:" + className + ":" + uuid, "Edit", mod.toString());
         }
         add(pitchModsPanel);
     }
@@ -65,7 +67,8 @@ public class Palette extends Panel {
         for (int i = 0; i < notes.size(); i++) {
             Note note = notes.get(i);
             String uuid = note.getUuid().toString();
-            addRow(notesPanel, "   " + i, "edit:note:synthesis.Note:" + uuid, "Edit", note.toString());
+            addRow(notesPanel, String.valueOf(i + 1),
+                    "edit:note:synthesis.Note:" + uuid, "Edit", note.toString());
         }
         add(notesPanel);
     }
@@ -78,7 +81,8 @@ public class Palette extends Panel {
             Instrument instr = instruments.get(i);
             String uuid = instr.getUuid().toString();
             String className = instr.getClass().getName();
-            addRow(instrPanel, "   " + i, "edit:instr:" + className + ":" + uuid, "Edit", instr.toString());
+            addRow(instrPanel, String.valueOf(i + 1),
+                    "edit:instr:" + className + ":" + uuid, "Edit", instr.toString());
         }
         add(instrPanel);
     }
@@ -286,7 +290,7 @@ public class Palette extends Panel {
 
     public void processEditInstr(String[] command) {
         switch (command[2]) {
-            case "synthesis.ConstantPitch":
+            case "synthesis.SinusoidInstrument":
                 JOptionPane.showMessageDialog(this, "Nothing to edit!");
                 break;
             case "synthesis.KeyedInstrument":

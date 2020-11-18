@@ -1,8 +1,5 @@
 package synthesis;
 
-import org.json.JSONObject;
-import persistence.Persistent;
-
 import java.util.UUID;
 
 public class KeyedPitch extends KeyedElement implements PitchModulator {

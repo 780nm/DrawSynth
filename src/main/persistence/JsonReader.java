@@ -1,11 +1,8 @@
 package persistence;
 
-import exceptions.ElementNotFoundException;
 import exceptions.GeneratorException;
-import exceptions.NoteIntersectionException;
 import model.Sequencer;
 import org.json.JSONArray;
-import org.json.JSONException;
 import org.json.JSONObject;
 import synthesis.*;
 
