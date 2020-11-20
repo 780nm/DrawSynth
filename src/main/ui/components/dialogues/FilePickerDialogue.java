@@ -6,11 +6,14 @@ import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.awt.*;
 
+// UI for selecting sequencer files
 public class FilePickerDialogue {
 
     private static final String FILE_EXT = "json";
     private static final String FILE_ROOT = "./data/";
 
+    // MODIFIES: performs given FileAction
+    // EFFECTS: Create a new dialogue and perform the given FileAction, retry upon failure
     public FilePickerDialogue(JComponent target, FileAction action) {
         JFileChooser fileChooser = new JFileChooser(FILE_ROOT);
         fileChooser.setDialogTitle(action.getActionTitle());

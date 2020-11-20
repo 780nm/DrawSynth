@@ -8,12 +8,15 @@ import javax.swing.*;
 import java.util.ArrayList;
 import java.util.UUID;
 
+// UI for selecting a note and inserting it into a track
 public class InsertNoteDialogue extends PropertiesDialogue {
 
     private final SequencerApp app;
     private final JSpinner position;
     private Note note;
 
+    // MODIFIES: app
+    // EFFECTS: Create a new dialogue and attempt to insert selected note at given position, retry on failure.
     public InsertNoteDialogue(JComponent target, SequencerApp app, UUID trackID) {
         this.app = app;
         position = new JSpinner(new SpinnerNumberModel(0., 0., Double.MAX_VALUE, .1));
@@ -37,6 +40,9 @@ public class InsertNoteDialogue extends PropertiesDialogue {
         }
     }
 
+    // MODIFIES: app
+    // EFFECTS: Given track, show properties dialog and attempt to insert note into track at given position.
+    //          Return true on success.
     private boolean tryInsert(JComponent target, UUID trackID) {
         int choice = JOptionPane.showConfirmDialog(target, panel, "Add Note", JOptionPane.OK_CANCEL_OPTION);
 

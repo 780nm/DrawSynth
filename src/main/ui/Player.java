@@ -3,7 +3,6 @@ package ui;
 import model.Playable;
 
 import javax.sound.sampled.*;
-import java.io.IOException;
 import java.util.Arrays;
 
 // Instantiates a new thread and plays an Object supporting the Playable interface using the Java Sound API

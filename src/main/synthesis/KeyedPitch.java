@@ -2,12 +2,15 @@ package synthesis;
 
 import java.util.UUID;
 
+// Represents a pitch modulator with a drawn pitch curve
 public class KeyedPitch extends KeyedElement implements PitchModulator {
 
+    // EFFECTS: Constructs a keyframed pitch modulator
     public KeyedPitch() {
         super();
     }
 
+    // EFFECTS: Constructs a keyframed pitch modulator with the given UUID
     public KeyedPitch(UUID id) {
         super(id);
     }
@@ -18,6 +21,7 @@ public class KeyedPitch extends KeyedElement implements PitchModulator {
         return sampleRate / basePitch * lerpAt(time * getFrameCount());
     }
 
+    // EFFECTS: Returns the state of the object as a formatted string
     public String toString() {
         return "Keyframed Pitch Modulator: Frames - " + frames.size();
     }

@@ -8,6 +8,7 @@ import ui.actions.ModelAction;
 import javax.swing.*;
 import java.util.ArrayList;
 
+// UI for inputting note properties
 public class NotePropertiesDialogue extends PropertiesDialogue {
 
     private AmplitudeModulator ampMod;
@@ -16,6 +17,8 @@ public class NotePropertiesDialogue extends PropertiesDialogue {
     private JSpinner pitch;
     private JSpinner duration;
 
+    // MODIFIES: app
+    // EFFECTS: Create a new dialogue and perform the given ModelAction on completion
     public NotePropertiesDialogue(JComponent target, SequencerApp app, ModelAction action) {
         ArrayList<AmplitudeModulator> ampMods = app.getSeq().getAmpMods();
         ArrayList<PitchModulator> pitchMods = app.getSeq().getPitchMods();
@@ -43,6 +46,8 @@ public class NotePropertiesDialogue extends PropertiesDialogue {
 
     }
 
+    // MODIFIES: this
+    // EFFECTS: adds modulator selection UI to panel
     private void addComboBoxes(JPanel panel, ArrayList<AmplitudeModulator> ampMods,
                                ArrayList<PitchModulator> pitchMods) {
 
@@ -54,6 +59,7 @@ public class NotePropertiesDialogue extends PropertiesDialogue {
         ampModCombo.addActionListener(e -> ampMod = (AmplitudeModulator)ampModCombo.getSelectedItem());
         pitchModCombo.addActionListener(e -> pitchMod = (PitchModulator)pitchModCombo.getSelectedItem());
 
+        // Make sure there exists a default selection
         ampModCombo.setSelectedIndex(0);
         pitchModCombo.setSelectedIndex(0);
 
@@ -61,6 +67,8 @@ public class NotePropertiesDialogue extends PropertiesDialogue {
         addRow(panel, "Pitch Modulator", pitchModCombo);
     }
 
+    // MODIFIES: this
+    // EFFECTS: adds numerical inputs to panel
     private void addNumericalInputs(JPanel panel) {
         amp = new JSlider(0, 1000);
         pitch = new JSpinner(new SpinnerNumberModel(0., 0., Double.MAX_VALUE, 10));

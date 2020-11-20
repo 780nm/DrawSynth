@@ -13,29 +13,34 @@ import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.io.IOException;
 
+// Menu Bar UI element
 public class MenuBar extends JMenuBar implements ActionListener {
 
     SequencerApp app;
 
+    // MODIFIES: app
+    // EFFECTS: generates a new menu-bar given an application
     public MenuBar(SequencerApp app) {
         super();
         this.app = app;
 
-        add(new ToolbarButton("Save", "save", this));
-        add(new ToolbarButton("Load", "load", this));
-        add(new ToolbarButton("Play", "play", this));
+        add(toolbarButton("Save", "save"));
+        add(toolbarButton("Load", "load"));
+        add(toolbarButton("Play", "play"));
     }
 
-    private static class ToolbarButton extends JButton {
-        public ToolbarButton(String text, String command, ActionListener listener) {
-            super(text);
-            setSize(60,30);
-            setEnabled(true);
-            setActionCommand(command);
-            addActionListener(listener);
-        }
+    // EFFECTS: Create a new button with the given action and return it
+    public JButton toolbarButton(String text, String command) {
+        JButton button = new JButton(text);
+        button.setSize(60,30);
+        button.setEnabled(true);
+        button.setActionCommand(command);
+        button.addActionListener(this);
+        return button;
     }
 
+    // MODIFIES: app
+    // EFFECTS: Adds elements to the application as per input command
     public void actionPerformed(ActionEvent e) {
         switch (e.getActionCommand()) {
             case "save":
@@ -50,6 +55,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
         }
     }
 
+    // MODIFIES: file-system
+    // EFFECTS: Saves the current state of the application to disk
     private void processSave() {
         FileAction save = new FileAction() {
             @Override
@@ -77,6 +84,8 @@ public class MenuBar extends JMenuBar implements ActionListener {
         new FilePickerDialogue(this, save);
     }
 
+    // MODIFIES: app
+    // EFFECTS: Reloads the application from disk
     private void processLoad() {
         FileAction load = new FileAction() {
             @Override

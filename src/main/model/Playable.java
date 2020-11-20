@@ -1,7 +1,6 @@
 package model;
 
 import javax.sound.sampled.AudioFormat;
-import java.io.IOException;
 
 // Objects implementing the Playable interface may upon request generate an audio clip as a byte array
 public interface Playable {

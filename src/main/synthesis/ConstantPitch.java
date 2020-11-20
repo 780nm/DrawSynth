@@ -9,10 +9,12 @@ public class ConstantPitch implements PitchModulator {
 
     private UUID pitchModId;
 
+    // EFFECTS: Constructs a constant pitch modulator
     public ConstantPitch() {
         pitchModId = UUID.randomUUID();
     }
 
+    // EFFECTS: Constructs a constant pitch modulator with given UUID
     public ConstantPitch(UUID id) {
         pitchModId = id;
     }
@@ -31,10 +33,13 @@ public class ConstantPitch implements PitchModulator {
         return json;
     }
 
+    // EFFECTS: Returns the state of the object as a formatted string
     @Override
     public String toString() {
         return "Constant Pitch Modulator";
     }
+
+    // Getters
 
     public UUID getUuid() {
         return pitchModId;

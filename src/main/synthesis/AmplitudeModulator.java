@@ -12,4 +12,5 @@ public interface AmplitudeModulator extends Persistent {
     // MODIFIES: wave
     // EFFECTS: Manipulates the given byte array as per the associated amplitude specification
     void applyAmplitudeProfile(double baseAmplitude, ArrayList<Double> wave, AudioFormat format);
+
 }

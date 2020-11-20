@@ -225,6 +225,8 @@ public class JsonReader {
         }
     }
 
+    // REQUIRES: json is a serialized double array
+    // EFFECTS: Adds all values in the given JSON array to the given KeyedElement
     private void populateKeyedElement(JSONObject json, KeyedElement element) {
         json.getJSONArray("frames").forEach(frame -> element.addFrame(Double.valueOf(frame.toString())));
     }

@@ -4,37 +4,41 @@ import org.json.JSONArray;
 import org.json.JSONObject;
 import persistence.Persistent;
 
-
 import java.util.ArrayList;
 import java.util.UUID;
 
+// Represents an element with an arbitrary double curve
 public abstract class KeyedElement implements Persistent {
 
     protected ArrayList<Double> frames;
     private UUID keyedId;
 
+    // EFFECTS: Constructs a keyframed element
     public KeyedElement() {
         clear();
         keyedId = UUID.randomUUID();
     }
 
+    // EFFECTS: Constructs a keyframed element with given UUID
     public KeyedElement(UUID id) {
         clear();
         keyedId = id;
     }
 
+    // MODIFIES: this
+    // EFFECTS: Removes all frames
     public void clear() {
         frames = new ArrayList<>();
     }
 
+    // MODIFIES: this
+    // EFFECTS: Appends a frame with the given value to the frame list
     public void addFrame(Double frame) {
         frames.add(frame);
     }
 
-    public int getFrameCount() {
-        return frames.size();
-    }
-
+    // EFFECTS: Given a position, performs a linear interpolation between
+    //          frames adjacent to that position and returns the result
     protected double lerpAt(double position) {
         if (0 < position && position < frames.size() - 1) {
             double prev = frames.get((int) Math.floor(position));
@@ -48,6 +52,7 @@ public abstract class KeyedElement implements Persistent {
         }
     }
 
+    // EFFECTS: Returns the state of the Object as a serialized JSONObject
     @Override
     public JSONObject toJson() {
         JSONArray frameArray = new JSONArray();
@@ -62,8 +67,14 @@ public abstract class KeyedElement implements Persistent {
         return json;
     }
 
+    // Getters
+
     public UUID getUuid() {
         return keyedId;
+    }
+
+    public int getFrameCount() {
+        return frames.size();
     }
 
 }

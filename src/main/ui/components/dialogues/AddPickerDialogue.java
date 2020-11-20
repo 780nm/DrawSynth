@@ -4,10 +4,13 @@ import ui.actions.ModelAction;
 
 import javax.swing.*;
 
+// UI for selecting which of a list of elements should be added to the application
 public class AddPickerDialogue extends PropertiesDialogue {
 
     private ModelAction selected;
 
+    // MODIFIES: performs one of given ModelActions
+    // EFFECTS: Create a new picker dialogue and perform the selected action
     public AddPickerDialogue(JComponent target, ModelAction[] actions) {
         ButtonGroup group = new ButtonGroup();
 

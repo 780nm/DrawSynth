@@ -1,7 +1,6 @@
 package persistence;
 
 import exceptions.ElementNotFoundException;
-import exceptions.GeneratorException;
 import org.json.JSONArray;
 import org.json.JSONObject;
 

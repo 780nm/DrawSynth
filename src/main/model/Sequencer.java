@@ -1,7 +1,5 @@
 package model;
 
-import exceptions.ElementNotFoundException;
-import exceptions.NoteIntersectionException;
 import org.json.JSONObject;
 import persistence.Persistent;
 import synthesis.AmplitudeModulator;
@@ -89,7 +87,6 @@ public class Sequencer implements Playable, Persistent {
     // EFFECTS: Creates a new Note and adds to the sequencer and returns its index.
     //          Throws ElementNotFoundException if provided amp and pitch mod UUIDs are not present in the sequencer.
     public int addNote(double baseAmp, UUID ampModID, double basePitch, UUID pitchModID, int duration) {
-
         return addNote(UUID.randomUUID(), baseAmp, ampModID, basePitch, pitchModID, duration);
     }
 
@@ -129,6 +126,7 @@ public class Sequencer implements Playable, Persistent {
         return track.addNote(time, note);
     }
 
+    // EFFECTS: Returns the state of the Sequencer as a serialized JSONObject
     @Override
     public JSONObject toJson() {
         JSONObject json = new JSONObject();

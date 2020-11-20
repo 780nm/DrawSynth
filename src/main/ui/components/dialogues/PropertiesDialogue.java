@@ -3,16 +3,19 @@ package ui.components.dialogues;
 import javax.swing.*;
 import java.awt.*;
 
+// UI for inputting element properties
 public abstract class PropertiesDialogue {
 
     protected JPanel panel;
 
+    // EFFECTS: Sets up the dialogue panel
     protected PropertiesDialogue() {
         panel = new JPanel();
         panel.setLayout(new BoxLayout(panel, BoxLayout.Y_AXIS));
         panel.setAlignmentX(Component.LEFT_ALIGNMENT);
     }
 
+    // EFFECTS: Adds a row to the target panel, with given title and contents
     protected void addRow(JComponent target, String rowTitle, JComponent content) {
         JPanel row = new JPanel();
 

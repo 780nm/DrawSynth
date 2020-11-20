@@ -1,10 +1,7 @@
 package ui;
 
 import exceptions.ElementNotFoundException;
-import exceptions.NoteIntersectionException;
-import model.Note;
 import model.Sequencer;
-import model.Track;
 import synthesis.*;
 import ui.components.MenuBar;
 import ui.components.Palette;
@@ -12,10 +9,6 @@ import ui.components.Timeline;
 
 import javax.sound.sampled.AudioFormat;
 import javax.swing.*;
-import javax.swing.event.ChangeEvent;
-import javax.swing.event.ChangeListener;
-import java.util.ArrayList;
-import java.util.UUID;
 
 import static javax.sound.sampled.AudioFormat.Encoding.PCM_SIGNED;
 
@@ -44,15 +37,23 @@ public class SequencerApp extends JFrame {
         tabIndex = 0;
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         initializeContent();
-
     }
 
+    // The current implementation redraws the entire UI whenever the model is changed.
+    // Given the complexity in mutating UI state in conjunction with model state,
+    // this was deemed acceptable in this small application context.
+    // In an evolution of this project, a reactive UI library would be a more palatable choice.
+
+    // MODIFIES: this
+    // EFFECTS: Recomputes all UI components
     public void reinitializeContent() {
         initializeContent();
         repaint();
         System.gc();
     }
 
+    // MODIFIES: this
+    // EFFECTS: Recomputes all UI components and sets re-inserts them into the app panel
     // With help from https://stackoverflow.com/questions/6799731/jtabbedpane-changelistener
     private void initializeContent() {
         JMenuBar bar = new MenuBar(this);
@@ -72,6 +73,7 @@ public class SequencerApp extends JFrame {
         setVisible(true);
     }
 
+    // EFFECTS: Plays the current state of the sequencer
     public void play() {
         player.start();
     }

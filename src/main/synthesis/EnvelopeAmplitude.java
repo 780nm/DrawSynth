@@ -75,7 +75,7 @@ public class EnvelopeAmplitude implements AmplitudeModulator {
         }
     }
 
-    // EFFECTS: Returns the state of the Note as a serialized JSONObject
+    // EFFECTS: Returns the state of the Object as a serialized JSONObject
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("uuid", ampModID.toString());
@@ -86,6 +86,7 @@ public class EnvelopeAmplitude implements AmplitudeModulator {
         return json;
     }
 
+    // EFFECTS: Returns the state of the object as a formatted string
     @Override
     public String toString() {
         return "Envelope Amp: Attack - " + String.format("%.4g", attack)

@@ -6,10 +6,13 @@ import ui.actions.ModelAction;
 
 import javax.swing.*;
 
+// UI for inputting note properties
 public class TrackPropertiesDialogue extends PropertiesDialogue  {
 
     private Instrument instrument;
 
+    // MODIFIES: app
+    // EFFECTS: Create a new dialogue and perform the given ModelAction on completion
     public TrackPropertiesDialogue(JComponent target, SequencerApp app, ModelAction action) {
         JComboBox<Instrument> instrCombo =
                 new JComboBox<>(app.getSeq().getInstruments().stream().toArray(Instrument[]::new));

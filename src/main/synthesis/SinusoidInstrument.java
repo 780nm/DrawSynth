@@ -6,19 +6,22 @@ import javax.sound.sampled.AudioFormat;
 import java.util.ArrayList;
 import java.util.UUID;
 
+// Represents an instrument with a sinusoidal waveform
 public class SinusoidInstrument implements Instrument {
 
     private UUID instrumentID;
 
+    // EFFECTS: Constructs a sinusoidal instrument
     public SinusoidInstrument() {
         instrumentID = UUID.randomUUID();
     }
 
+    // EFFECTS: Constructs a sinusoidal instrument with the given UUID
     public SinusoidInstrument(UUID id) {
         instrumentID = id;
     }
 
-    // REQUIRES: format has a valid configuration, and encoding is PCM_SIGNED, pitch is not null
+    // REQUIRES: format has a valid configuration and encoding is PCM_SIGNED, pitch is not null
     // EFFECTS: Return a Double ArrayList representation of the audio source in the given format,
     //          as a function of the given pitch modulator and duration
     public ArrayList<Double> synthesizeWaveform(double basePitch, PitchModulator pitchMod,
@@ -42,7 +45,7 @@ public class SinusoidInstrument implements Instrument {
         return wave;
     }
 
-    // EFFECTS: Returns the state of the Note as a serialized JSONObject
+    // EFFECTS: Returns the state of the Object as a serialized JSONObject
     public JSONObject toJson() {
         JSONObject json = new JSONObject();
         json.put("uuid", instrumentID.toString());
@@ -50,6 +53,7 @@ public class SinusoidInstrument implements Instrument {
         return json;
     }
 
+    // EFFECTS: Returns the state of the object as a formatted string
     @Override
     public String toString() {
         return "Sinusoid Instrument";

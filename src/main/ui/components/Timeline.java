@@ -11,8 +11,11 @@ import java.util.ArrayList;
 import java.util.Map;
 import java.util.TreeMap;
 
+// Palette UI Element, containing a list of tracks and facilitating their manipulation
 public class Timeline extends Panel {
 
+    // MODIFIES: app
+    // EFFECTS: generates a new timeline panel given an application
     public Timeline(SequencerApp app) {
         super(app, new TimelineActionManager(app));
 
@@ -21,6 +24,8 @@ public class Timeline extends Panel {
         addTracks();
     }
 
+    // MODIFIES: this
+    // EFFECTS: adds track information and buttons to the timeline
     private void addTracks() {
         ArrayList<Track> tracks = app.getSeq().getTracks();
 
@@ -37,6 +42,7 @@ public class Timeline extends Panel {
         }
     }
 
+    // EFFECTS: Returns a panel with the notes in a given track and their associated menu buttons
     private JPanel notesInfo(Track track) {
         JPanel noteList = new JPanel();
         noteList.setLayout(new BoxLayout(noteList, BoxLayout.X_AXIS));
@@ -63,6 +69,8 @@ public class Timeline extends Panel {
         return noteList;
     }
 
+    // MODIFIES: target
+    // EFFECTS: adds a horizontal separator to the target
     protected void addHSep(JComponent target) {
         JSeparator separator = new JSeparator(JSeparator.VERTICAL);
         Dimension size = new Dimension(

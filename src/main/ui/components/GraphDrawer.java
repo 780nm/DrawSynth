@@ -8,6 +8,7 @@ import java.awt.event.MouseMotionAdapter;
 import java.util.Map;
 import java.util.TreeMap;
 
+// Drawable parametric graph UI component
 public class GraphDrawer extends JPanel {
 
     private static final int RESOLUTION = 500;
@@ -20,14 +21,15 @@ public class GraphDrawer extends JPanel {
 
     protected Map<Integer, Double> frames;
 
-    private double baseline;
     private double min;
     private double max;
+    private double baseline;
 
+    // EFFECTS: Creates a new graph element with associated max, min and baseline
     public GraphDrawer(double min, double max, double baseline) {
         super();
-        this.max = max;
         this.min = min;
+        this.max = max;
         this.baseline = baseline;
         frames = new TreeMap<>();
         setupMouseClick();
@@ -35,15 +37,20 @@ public class GraphDrawer extends JPanel {
         setPreferredSize(new Dimension(WIDTH, HEIGHT));
     }
 
+    // MODIFIES: this
+    // EFFECTS: Resets the graph
     public void reset() {
         frames.clear();
         repaint();
     }
 
+    // EFFECTS: Returns the collection of points displayed
     public Map<Integer, Double> getFrames() {
         return frames;
     }
 
+    // MODIFIES: this
+    // EFFECTS: Adds mouse handler for drawing functionality to panel
     private void setupMouseClick() {
         addMouseListener(new MouseAdapter() {
             @Override
@@ -61,6 +68,9 @@ public class GraphDrawer extends JPanel {
         });
     }
 
+
+    // MODIFIES: this
+    // EFFECTS: Adds mouse handler for drawing functionality to panel
     private void setupMouseDrag() {
         addMouseMotionListener(new MouseMotionAdapter() {
             public void mouseMoved(MouseEvent e) {
@@ -79,6 +89,9 @@ public class GraphDrawer extends JPanel {
         });
     }
 
+
+    // MODIFIES: this
+    // EFFECTS: Given set of frames, interpolates intermediate frames and fills line with a linear approximation
     private void packLine() {
         Integer[] keys = new Integer[frames.size()];
         keys = frames.keySet().toArray(keys);
@@ -97,6 +110,7 @@ public class GraphDrawer extends JPanel {
 
     }
 
+    // EFFECTS: Draws the graph and set of point to the frame
     @Override
     protected void paintComponent(Graphics g) {
         super.paintComponent(g);

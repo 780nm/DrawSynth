@@ -17,12 +17,16 @@ import java.util.UUID;
 
 import static persistence.PersistenceUtil.getElementWithID;
 
+// Processes actions related to the Palette UI element
 public class PaletteActionManager extends ActionManager {
 
+    // EFFECTS: creates a new action manager with the associated application model
     public PaletteActionManager(SequencerApp app) {
         super(app);
     }
 
+    // MODIFIES: app
+    // EFFECTS: Catches fired action events and modifies the application model accordingly
     public void actionPerformed(ActionEvent e) {
         String[] command = e.getActionCommand().split(":");
         switch (command[0]) {
@@ -34,6 +38,8 @@ public class PaletteActionManager extends ActionManager {
         }
     }
 
+    // MODIFIES: app
+    // EFFECTS: Adds elements to the application as per input command
     private void processAdd(String[] command) {
         switch (command[1]) {
             case "ampMod":
@@ -50,6 +56,8 @@ public class PaletteActionManager extends ActionManager {
         }
     }
 
+    // MODIFIES: app
+    // EFFECTS:  Adds an amplitude modulator sequencer as per input configuration
     private void processAddAmpMod() {
         ModelAction addEnvelopeMod = new ModelAction() {
             public String getActionName() {
@@ -74,11 +82,14 @@ public class PaletteActionManager extends ActionManager {
         new AddPickerDialogue(target, new ModelAction[]{addEnvelopeMod, addKeyedMod});
     }
 
+    // EFFECTS: Generates and calls a new edit command given an amplitude modulator
     private void editAmpModHelper(AmplitudeModulator ampMod) {
         app.getSeq().addAmpMod(ampMod);
         processEdit(new String[]{"", "ampMod", ampMod.getClass().getName(), ampMod.getUuid().toString()});
     }
 
+    // MODIFIES: app
+    // EFFECTS:  Adds a pitch modulator to the sequencer as per input configuration
     private void processAddPitchMod() {
         ModelAction addConstantMod = new ModelAction() {
             public String getActionName() {
@@ -106,6 +117,8 @@ public class PaletteActionManager extends ActionManager {
         new AddPickerDialogue(target, new ModelAction[]{addConstantMod, addKeyedMod});
     }
 
+    // MODIFIES: app
+    // EFFECTS:  Adds a note to the sequencer as per input configuration
     private void processAddNote() {
         ModelAction addNoteAction = new ModelAction() {
             @Override
@@ -129,6 +142,8 @@ public class PaletteActionManager extends ActionManager {
         new NotePropertiesDialogue(target, app, addNoteAction);
     }
 
+    // MODIFIES: app
+    // EFFECTS:  Adds an instrument to the sequencer as per input configuration
     private void processAddInstr() {
         ModelAction addSinusoidInstr = new ModelAction() {
             public String getActionName() {
@@ -156,6 +171,9 @@ public class PaletteActionManager extends ActionManager {
         new AddPickerDialogue(target, new ModelAction[]{addSinusoidInstr, addKeyedInstr});
     }
 
+    // REQUIRES: command[] is not malformed
+    // MODIFIES: app
+    // EFFECTS:  Manipulates existing application elements as per input command
     private void processEdit(String[] command) {
         switch (command[1]) {
             case "ampMod":
@@ -173,6 +191,9 @@ public class PaletteActionManager extends ActionManager {
         app.reinitializeContent();
     }
 
+    // REQUIRES: command[] is not malformed
+    // MODIFIES: app
+    // EFFECTS:  edits existing amplitude modulator per input configuration
     private void processEditAmpMod(String[] command) {
         AmplitudeModulator mod = getElementWithID(app.getSeq().getAmpMods(), UUID.fromString(command[3]));
 
@@ -191,6 +212,9 @@ public class PaletteActionManager extends ActionManager {
         }
     }
 
+    // REQUIRES: command[] is not malformed
+    // MODIFIES: app
+    // EFFECTS:  edits existing pitch modulator per input configuration
     private void processEditPitchMod(String[] command) {
         switch (command[2]) {
             case "synthesis.ConstantPitch":
@@ -208,6 +232,9 @@ public class PaletteActionManager extends ActionManager {
         }
     }
 
+    // REQUIRES: command[] is not malformed
+    // MODIFIES: app
+    // EFFECTS:  edits existing note per input configuration
     private void processEditNote(String[] command) {
         Note note = getElementWithID(app.getSeq().getNotes(), UUID.fromString(command[3]));
 
@@ -235,6 +262,9 @@ public class PaletteActionManager extends ActionManager {
         new NotePropertiesDialogue(target, app, addNoteAction);
     }
 
+    // REQUIRES: command[] is not malformed
+    // MODIFIES: app
+    // EFFECTS:  edits existing instrument per input configuration
     public void processEditInstr(String[] command) {
         switch (command[2]) {
             case "synthesis.SinusoidInstrument":

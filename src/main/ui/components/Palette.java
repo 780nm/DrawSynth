@@ -1,23 +1,18 @@
 package ui.components;
 
 import model.Note;
-import persistence.PersistenceUtil;
-import persistence.Persistent;
 import synthesis.*;
 import ui.SequencerApp;
-import ui.actions.ModelAction;
 import ui.actions.PaletteActionManager;
-import ui.components.dialogues.*;
 
 import javax.swing.*;
-import java.awt.event.ActionEvent;
 import java.util.ArrayList;
-import java.util.UUID;
 
-import static persistence.PersistenceUtil.getElementWithID;
-
+// Palette UI Element, containing a list of available components and facilitating their manipulation
 public class Palette extends Panel {
 
+    // MODIFIES: app
+    // EFFECTS: generates a new palette panel given an application
     public Palette(SequencerApp app) {
         super(app, new PaletteActionManager(app));
 
@@ -37,6 +32,8 @@ public class Palette extends Panel {
     // Would've liked to consolidate all the below into one generic function,
     // but there's no good way to get runtime class info on generic types
 
+    // MODIFIES: this
+    // EFFECTS: Adds the list of amplitude modulators and their controls to the palette
     private void addAmpModInfo() {
         JPanel ampModsPanel = panelHelper();
 
@@ -51,6 +48,8 @@ public class Palette extends Panel {
         add(ampModsPanel);
     }
 
+    // MODIFIES: this
+    // EFFECTS: Adds the list of pitch modulators and their controls to the palette
     public void addPitchModInfo() {
         JPanel pitchModsPanel = panelHelper();
 
@@ -65,6 +64,8 @@ public class Palette extends Panel {
         add(pitchModsPanel);
     }
 
+    // MODIFIES: this
+    // EFFECTS: Adds the list of notes and their controls to the palette
     public void addNotesInfo() {
         JPanel notesPanel = panelHelper();
 
@@ -78,6 +79,8 @@ public class Palette extends Panel {
         add(notesPanel);
     }
 
+    // MODIFIES: this
+    // EFFECTS: Adds the list of instruments and their controls to the palette
     public void addInstrInfo() {
         JPanel instrPanel = panelHelper();
 

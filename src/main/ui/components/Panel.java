@@ -9,11 +9,13 @@ import java.awt.event.ActionListener;
 import java.util.Map;
 import java.util.TreeMap;
 
+// Abstract UI component representing an application panel, with helper functions
 public abstract class Panel extends JPanel {
 
     protected SequencerApp app;
     protected ActionListener actionListener;
 
+    // EFFECTS: creates a new panel with the given action manager and associated application
     public Panel(SequencerApp app, ActionManager actionListener) {
         super();
 
@@ -27,12 +29,16 @@ public abstract class Panel extends JPanel {
 
     }
 
+    // MODIFIES: this
+    // EFFECTS: Adds a row to the panel with given title, button and info text
     protected void addRow(JComponent target, String rowTitle, String action, String buttonText, String infoText) {
         Map<String,String> act = new TreeMap<>();
         act.put(buttonText, action);
         addRow(target, rowTitle, act, new JLabel(infoText));
     }
 
+    // MODIFIES: this
+    // EFFECTS: Adds a row to the panel with given title, buttons and content
     protected void addRow(JComponent target, String rowTitle, Map<String,String> actions, JComponent content) {
         JPanel row = new JPanel();
         row.setLayout(new BoxLayout(row, BoxLayout.LINE_AXIS));
@@ -59,6 +65,7 @@ public abstract class Panel extends JPanel {
         target.add(Box.createVerticalStrut(5));
     }
 
+    // EFFECTS: Constructs a button with the given title and action and returns it
     protected JButton editButton(String title, String action) {
         JButton button = new JButton(title);
         button.setSize(60, 30);
@@ -68,12 +75,16 @@ public abstract class Panel extends JPanel {
         return button;
     }
 
+    // MODIFIES: this
+    // EFFECTS: Adds a horizontal separator to the panel
     protected void addSep() {
         JSeparator separator = new JSeparator(JSeparator.HORIZONTAL);
         boundHeight(separator);
         add(separator);
     }
 
+    // MODIFIES: component
+    // EFFECTS: Bounds the vertical height of a component so it doesn't expand to fill space
     protected void boundHeight(JComponent component) {
         component.setMaximumSize(new Dimension(
                 component.getMaximumSize().width,
@@ -81,6 +92,7 @@ public abstract class Panel extends JPanel {
         ));
     }
 
+    // EFFECTS: Returns an empty JPanel with column formatting
     protected JPanel panelHelper() {
         JPanel section = new JPanel();
         section.setLayout(new BoxLayout(section, BoxLayout.Y_AXIS));
