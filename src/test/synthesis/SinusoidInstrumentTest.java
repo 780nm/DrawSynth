@@ -42,4 +42,10 @@ public class SinusoidInstrumentTest {
         }
     }
 
+    @Test
+    public void testToString() {
+        sine = new SinusoidInstrument();
+        assertEquals("Sinusoid Instrument", sine.toString());
+    }
+
 }

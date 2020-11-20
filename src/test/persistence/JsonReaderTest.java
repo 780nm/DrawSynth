@@ -1,14 +1,10 @@
 package persistence;
 
-import exceptions.ElementNotFoundException;
 import exceptions.GeneratorException;
-import exceptions.NoteIntersectionException;
 import model.Sequencer;
 import org.junit.jupiter.api.Test;
-import synthesis.*;
 
 import java.io.IOException;
-import java.util.UUID;
 
 import static org.junit.jupiter.api.Assertions.*;
 import static persistence.PersistenceTestUtil.evalFileEquality;

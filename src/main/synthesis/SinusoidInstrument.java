@@ -31,12 +31,14 @@ public class SinusoidInstrument implements Instrument {
         double scale = Math.pow(2, format.getSampleSizeInBits() - 1);
         int finalIndex = duration * channels - channels + 1;
 
+        double prev = 0;
         double period;
         double sample;
 
         for (int i = 0; i < finalIndex; i += channels) {
             period = pitchMod.getPeriodAtTime(basePitch,i / (double)(finalIndex), format.getSampleRate());
-            sample = Math.sin(i * Math.PI / period) * scale;
+            sample = Math.sin(prev) * scale;
+            prev += 2 * Math.PI / period;
             for (int j = 0; j < channels; j++) {
                 wave.add(sample);
             }

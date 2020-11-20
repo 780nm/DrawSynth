@@ -20,4 +20,10 @@ public class ConstantPitchTest {
         assertEquals(id, pitch.getUuid());
     }
 
+    @Test
+    public void testToString() {
+        pitch = new ConstantPitch();
+        assertEquals("Constant Pitch Modulator", pitch.toString());
+    }
+
 }

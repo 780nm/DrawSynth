@@ -23,7 +23,7 @@ public class KeyedAmplitude extends KeyedElement implements AmplitudeModulator {
     public void applyAmplitudeProfile(double amplitude, ArrayList<Double> wave, AudioFormat format) {
         int channels = format.getChannels();
         int size = wave.size();
-        int frameCount = getFrameCount();
+        int frameCount = frames.size();
 
         for (int i = 0; i < size - channels + 1; i += channels) {
             for (int j = 0; j < channels; j++) {

@@ -8,6 +8,7 @@ import synthesis.ConstantPitch;
 import synthesis.EnvelopeAmplitude;
 import synthesis.Instrument;
 import synthesis.SinusoidInstrument;
+import ui.SequencerApp;
 
 import javax.sound.sampled.AudioFormat;
 import static javax.sound.sampled.AudioFormat.Encoding.PCM_SIGNED;
@@ -79,6 +80,13 @@ public class NoteTest {
             assertEquals(expected2[i], wave2.get(i), DELTA);
         }
 
+    }
+
+    @Test
+    public void testToString() {
+        note = new Note(1,ampProfile,300,pitch,10);
+        String expected = "Base Pitch: 300.000hz , Base Amp: 100.0% , Duration: 0.0002268s";
+        assertEquals(expected, note.toString());
     }
 
 }

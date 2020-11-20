@@ -84,4 +84,11 @@ public class EnvelopeAmplitudeTest {
         }
     }
 
+    @Test
+    public void testToString() {
+        amplitudeOne = new EnvelopeAmplitude(0.5, 0.12, 0.5);
+        String expected = "Envelope Amp: Attack - 0.5000, Decay - 0.1200, Balance - 0.5000";
+        assertEquals(expected, amplitudeOne.toString());
+    }
+
 }

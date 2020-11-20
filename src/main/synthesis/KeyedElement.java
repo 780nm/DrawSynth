@@ -73,8 +73,4 @@ public abstract class KeyedElement implements Persistent {
         return keyedId;
     }
 
-    public int getFrameCount() {
-        return frames.size();
-    }
-
 }
