@@ -42,6 +42,7 @@ public class SequencerApp extends JFrame {
     // The current implementation redraws the entire UI whenever the model is changed.
     // Given the complexity in mutating UI state in conjunction with model state,
     // this was deemed acceptable in this small application context.
+    // Note that the complexity arises from the need for the structure of the UI to change, not just field contents
     // In an evolution of this project, a reactive UI library would be a more palatable choice.
 
     // MODIFIES: this
