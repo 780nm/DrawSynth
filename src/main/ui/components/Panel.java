@@ -1,23 +1,26 @@
 package ui.components;
 
-import model.Sequencer;
 import ui.SequencerApp;
+import ui.actions.ActionManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.Map;
 import java.util.TreeMap;
 
-public abstract class Panel extends JPanel implements ActionListener {
+public abstract class Panel extends JPanel {
 
     protected SequencerApp app;
+    protected ActionListener actionListener;
 
-    public Panel(SequencerApp app) {
+    public Panel(SequencerApp app, ActionManager actionListener) {
         super();
 
         this.app = app;
+        this.actionListener = actionListener;
+        actionListener.setTarget(this);
+
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setAlignmentX(Component.LEFT_ALIGNMENT);
         setAlignmentY(Component.TOP_ALIGNMENT);
@@ -36,8 +39,11 @@ public abstract class Panel extends JPanel implements ActionListener {
         row.setAlignmentX(Component.LEFT_ALIGNMENT);
 
         row.add(Box.createHorizontalStrut(10));
-        row.add(new JLabel(rowTitle));
-        row.add(Box.createHorizontalStrut(10));
+
+        if (rowTitle != null) {
+            row.add(new JLabel(rowTitle));
+            row.add(Box.createHorizontalStrut(10));
+        }
 
         for (Map.Entry<String, String> action : actions.entrySet()) {
             row.add(editButton(action.getKey(), action.getValue()));
@@ -58,7 +64,7 @@ public abstract class Panel extends JPanel implements ActionListener {
         button.setSize(60, 30);
         button.setEnabled(true);
         button.setActionCommand(action);
-        button.addActionListener(this);
+        button.addActionListener(actionListener);
         return button;
     }
 

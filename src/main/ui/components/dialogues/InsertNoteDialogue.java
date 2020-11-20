@@ -1,5 +1,6 @@
 package ui.components.dialogues;
 
+import exceptions.NoteIntersectionException;
 import model.Note;
 import ui.SequencerApp;
 
@@ -9,9 +10,8 @@ import java.util.UUID;
 
 public class InsertNoteDialogue extends PropertiesDialogue {
 
-    private SequencerApp app;
-
-    private JSpinner position;
+    private final SequencerApp app;
+    private final JSpinner position;
     private Note note;
 
     public InsertNoteDialogue(JComponent target, SequencerApp app, UUID trackID) {
@@ -40,12 +40,16 @@ public class InsertNoteDialogue extends PropertiesDialogue {
     private boolean tryInsert(JComponent target, UUID trackID) {
         int choice = JOptionPane.showConfirmDialog(target, panel, "Add Note", JOptionPane.OK_CANCEL_OPTION);
 
-        if (choice == 0) {
-            return app.getSeq().insertNote((int)((double)position.getValue() * SequencerApp.FORMAT.getFrameRate()),
-                    note.getUuid(), trackID);
+        try {
+            if (choice == 0) {
+                app.getSeq().insertNote((int)((double) position.getValue() * SequencerApp.FORMAT.getFrameRate()),
+                        note.getUuid(), trackID);
+            }
+            return false;
+        } catch (NoteIntersectionException e) {
+            return true;
         }
 
-        return false;
     }
 
 }
