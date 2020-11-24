@@ -42,3 +42,38 @@ and practicing building up an application using object-oriented design principle
 For the purpose of *Task 2*, The map interface was utilized in `Track.Java` for storing pairs of notes and their
 associated positions in a track, and `Panel.java` for passing the title and actions of menu buttons.
 
+*Task 3:* As one can see by perusing the UML diagram,
+there exists a fair amount of coupling present within the codebase.
+Given more time, the following actions could be taken:
+ - Refactor the UI to abstract away the sequencer's internal palette of notes,
+ or make notes wholly elements of tracks and make the process of inserting a note the point of note creation.
+ The two-step process is a remnant of the command line interface, but does not translate as well to a GUI design.
+ - There exist a considerable number of explicit casts based on runtime class names, which are liable to change.
+ Obviously, this is not ideal, but the decision to use this workaround was made predominantly due to the inability of
+ the given JSON serialization library to serialize/deserialize objects without discarding class data.
+ Using a library with this functionality would alleviate the need to perform such casting in `JsonReader`,
+ but for casting occurring in the UI (such as in the two `ActionManager` classes),
+  the UI could be refactored such that each form retains some knowledge of an
+ associated model element, and the UI state could subsequently be saved and loaded similarly to the model's,
+ retaining this association across user sessions. In the interest of time, this was not implemented,
+ and thus the UI is currently generated from the loaded model, and thus runtime classes must be inspected in order
+ to determine the appropriate edit dialogues for each model element.
+ This brings up an interesting issue with the OO paradigm, namely the inability to treat a collection of items
+ as having both unique and common properties. It is useful to, say, generate an audio sample with a variety of
+ instruments, but then manipulate each of those instruments in different ways.
+ If we choose to relax the separation between our UI and model, each instrument class could return a UI uniquely
+ suited to manipulating its own contents (perhaps we could standardize this through an interface),
+ and thus solve this issue entirely, but that option was denied.
+ - At the moment, any change to the model necessitates a reload of the UI. Since the application is very small,
+ this has no appreciable performance deficit, although it is bad practice.
+ Theoretically, one could shuffle components around explicitly after every action,
+ but preferably a modern reactive UI library would be utilized instead.
+ Such optimizations were avoided due to time constraints.
+ A declarative design paradigm would indeed work well in reducing complexity of this part of the codebase,
+ but that would not be possible in Java.
+ - Some static functions in `PersistenceUtil` could perhaps find a better place
+ - In a typical MVC setup, the UI and controller are separated, which is partially achieved here, but in principle
+ the separation should be made more explicit. Model separation remains good,
+ although as noted above that entailed serious compromises.
+ - Improving the robustness of the exceptions defined for the generation of model state from saved data and
+ subsequently improving the specificity of error messages would likely help with stability.
