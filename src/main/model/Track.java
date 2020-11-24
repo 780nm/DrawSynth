@@ -19,15 +19,12 @@ public class Track implements Playable, Persistent {
     private Map<Integer, Note> notes;
     private Instrument instrument;
 
-    private boolean muted;
-
     // REQUIRES: instrument is not null
     // EFFECTS: Constructs a new track with the given instrument, no notes and a random UUID
     public Track(Instrument instrument) {
         trackID = UUID.randomUUID();
         this.instrument = instrument;
         this.notes = new TreeMap<>();
-        this.muted = false;
     }
 
     // REQUIRES: instrument is not null
@@ -36,7 +33,6 @@ public class Track implements Playable, Persistent {
         trackID = id;
         this.instrument = instrument;
         this.notes = new TreeMap<>();
-        this.muted = false;
     }
 
     // REQUIRES: format has a valid configuration, and encoding is PCM_SIGNED
@@ -110,14 +106,6 @@ public class Track implements Playable, Persistent {
 
     public UUID getUuid() {
         return trackID;
-    }
-
-    public boolean isMuted() {
-        return muted;
-    }
-
-    public void setMuted(boolean muted) {
-        this.muted = muted;
     }
 
     public Map<Integer, Note> getNotes() {

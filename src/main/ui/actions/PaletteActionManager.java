@@ -1,7 +1,6 @@
 package ui.actions;
 
 import model.Note;
-import persistence.PersistenceUtil;
 import synthesis.*;
 import ui.SequencerApp;
 import ui.components.GraphDrawer;
@@ -15,7 +14,7 @@ import java.awt.event.ActionEvent;
 import java.util.ArrayList;
 import java.util.UUID;
 
-import static persistence.PersistenceUtil.getElementWithID;
+import static persistence.PersistenceUtil.*;
 
 // Processes actions related to the Palette UI element
 public class PaletteActionManager extends ActionManager {
@@ -250,9 +249,9 @@ public class PaletteActionManager extends ActionManager {
                 ArrayList<PitchModulator> pitchMods = app.getSeq().getPitchMods();
 
                 note.setBaseAmplitude((double)params[0]);
-                note.setAmpMod(PersistenceUtil.getElementWithID(ampMods, (UUID)params[1]));
+                note.setAmpMod(getElementWithID(ampMods, (UUID)params[1]));
                 note.setBasePitch((double)params[2]);
-                note.setPitchMod(PersistenceUtil.getElementWithID(pitchMods, (UUID)params[3]));
+                note.setPitchMod(getElementWithID(pitchMods, (UUID)params[3]));
                 note.setDuration((int)params[4]);
 
                 app.reinitializeContent();

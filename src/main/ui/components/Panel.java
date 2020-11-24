@@ -5,7 +5,6 @@ import ui.actions.ActionManager;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionListener;
 import java.util.Map;
 import java.util.TreeMap;
 
@@ -13,15 +12,15 @@ import java.util.TreeMap;
 public abstract class Panel extends JPanel {
 
     protected SequencerApp app;
-    protected ActionListener actionListener;
+    protected ActionManager actionManager;
 
     // EFFECTS: creates a new panel with the given action manager and associated application
-    public Panel(SequencerApp app, ActionManager actionListener) {
+    public Panel(SequencerApp app, ActionManager actionManager) {
         super();
 
         this.app = app;
-        this.actionListener = actionListener;
-        actionListener.setTarget(this);
+        this.actionManager = actionManager;
+        actionManager.setTarget(this);
 
         setLayout(new BoxLayout(this, BoxLayout.Y_AXIS));
         setAlignmentX(Component.LEFT_ALIGNMENT);
@@ -71,7 +70,7 @@ public abstract class Panel extends JPanel {
         button.setSize(60, 30);
         button.setEnabled(true);
         button.setActionCommand(action);
-        button.addActionListener(actionListener);
+        button.addActionListener(actionManager);
         return button;
     }
 

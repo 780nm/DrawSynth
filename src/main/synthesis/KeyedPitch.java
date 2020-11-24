@@ -22,6 +22,7 @@ public class KeyedPitch extends KeyedElement implements PitchModulator {
     }
 
     // EFFECTS: Returns the state of the object as a formatted string
+    @Override
     public String toString() {
         return "Keyframed Pitch Modulator: Frames - " + frames.size();
     }

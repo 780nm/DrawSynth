@@ -35,6 +35,7 @@ public class EnvelopeAmpPropertiesDialogue extends PropertiesDialogue {
         balance = new JSlider(-1000, 1000);
 
         setSliderModels();
+        decay.setValue(1000);
 
         addRow(panel, "Attack (% Duration)", attack);
         addRow(panel, "Attack (% Duration)", decay);
