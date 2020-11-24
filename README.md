@@ -37,3 +37,8 @@ and practicing building up an application using object-oriented design principle
 
 - As a user, I would like to export the encoded audio of a sequence to disk
 - As a user, i would like to define an instument as a composition of other instruments
+
+## Phase 4 Tasks
+For the purpose of *Task 2*, The map interface was utilized in `Track.Java` for storing pairs of notes and their
+associated positions in a track, and `Panel.java` for passing the title and actions of menu buttons.
+
