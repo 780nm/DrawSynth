@@ -47,13 +47,6 @@ public class TrackTest {
     }
 
     @Test
-    public void testGetSetMuted() {
-        assertFalse(track.isMuted());
-        track.setMuted(true);
-        assertTrue(track.isMuted());
-    }
-
-    @Test
     public void testGetSetInstrument() {
         assertEquals(instrument, track.getInstrument());
         Instrument sine2 = new SinusoidInstrument();
