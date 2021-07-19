@@ -22,7 +22,8 @@ public class FilePickerDialogue {
         fileChooser.setMultiSelectionEnabled(false);
         fileChooser.setFileSelectionMode(JFileChooser.FILES_AND_DIRECTORIES);
 
-        fileChooser.addChoosableFileFilter(new FileNameExtensionFilter("Sequencer Files", FILE_EXT));
+        fileChooser.addChoosableFileFilter(
+                new FileNameExtensionFilter("Sequencer Files (*," + FILE_EXT + ")", FILE_EXT));
         fileChooser.setAcceptAllFileFilterUsed(false);
 
         fileChooser.setMinimumSize(new Dimension(800, 600));
