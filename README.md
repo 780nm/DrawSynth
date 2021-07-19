@@ -1,6 +1,6 @@
 # Draw-Synth
 
-A final project for CPSC 210, an introductory course is object oriented software design I took at UBC.
+A final project for CPSC 210, an introductory course in object oriented software design I took at UBC.
 While the process was extremely instructive, the outcome is quite crude thanks to time pressure.
 What follows is the writeup I completed as part of the project;
 the section regarding my analysis of the completed work and options for future development may be of particular interest.
